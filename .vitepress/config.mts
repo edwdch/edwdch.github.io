@@ -5,6 +5,7 @@ export default defineConfig({
   title: "Edward's Notes",
   description: "This is where Edward keeps some notes.",
   cleanUrls: true,
+  lastUpdated: true,
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
     nav: [
