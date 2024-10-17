@@ -6,25 +6,35 @@ export default defineConfig({
   description: "This is where Edward keeps some notes.",
   cleanUrls: true,
   lastUpdated: true,
+  head: [
+    ['link', { rel: 'icon', href: '/favicon.png' }]
+  ],
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
     nav: [
-      { text: 'Home', link: '/' },
-      { text: 'Examples', link: '/markdown-examples' }
+      { text: '主页', link: '/' },
+      { text: '常用配置', link: '/configs/xiaohe' }
     ],
-
-    sidebar: [
-      {
-        text: 'Examples',
-        items: [
-          { text: 'Markdown Examples', link: '/markdown-examples' },
-          { text: 'Runtime API Examples', link: '/api-examples' }
-        ]
-      }
-    ],
-
+    logo: '/favicon.png',
+    sidebar: {
+      '/configs': [
+        {
+          text: '常用配置',
+          items: [
+            { text: '小鹤双拼', link: '/configs/xiaohe' },
+          ]
+        },
+      ]
+    },
     socialLinks: [
-      { icon: 'github', link: 'https://github.com/vuejs/vitepress' }
-    ]
-  }
+      { icon: 'github', link: 'https://github.com/edwdch/edwdch.github.io' }
+    ],
+    search: {
+      provider: 'local'
+    },
+    footer: {
+      message: 'Released under the MIT License.',
+      copyright: 'Copyright © 2024-present Edward Chen'
+    }
+  },
 })

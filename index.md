@@ -3,15 +3,12 @@
 layout: home
 
 hero:
-  name: "Edward's Notes"
-  text: "This is where Edward keeps some notes."
+  name: "Hey, I'm Edward"
+  text: "This is where I keep some notes."
   actions:
     - theme: brand
-      text: Markdown Examples
-      link: /markdown-examples
-    - theme: alt
-      text: API Examples
-      link: /api-examples
+      text: 常用配置
+      link: /configs/xiaohe
 
 features:
   - title: Feature A
