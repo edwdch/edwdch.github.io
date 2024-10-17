@@ -22,6 +22,8 @@ export default defineConfig({
           text: '常用配置',
           items: [
             { text: '小鹤双拼', link: '/configs/xiaohe' },
+            { text: '开发环境', link: '/configs/development' },
+            { text: 'Linux', link: '/configs/linux' },
           ]
         },
       ]
