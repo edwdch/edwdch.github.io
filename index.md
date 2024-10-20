@@ -7,8 +7,11 @@ hero:
   text: "这里会记录一些开发中遇到的问题和解决方案"
   actions:
     - theme: brand
-      text: 常用配置
-      link: /configs/xiaohe
+      text: Linux
+      link: /linux/linux
+    - theme: alt
+      text: Windows
+      link: /windows/xiaohe
 
 features:
   - title: Feature A

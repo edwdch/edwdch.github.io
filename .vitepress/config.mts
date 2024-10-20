@@ -32,20 +32,28 @@ export default defineConfig({
     // https://vitepress.dev/reference/default-theme-config
     nav: [
       { text: '主页', link: '/' },
-      { text: '常用配置', link: '/configs/xiaohe' }
+      { text: 'Linux', link: '/linux/linux' },
+      { text: 'Windows', link: '/windows/xiaohe' },
     ],
     logo: '/favicon.png',
     sidebar: {
-      '/configs': [
+      '/linux': [
         {
-          text: '常用配置',
+          text: 'Linux',
           items: [
-            { text: '小鹤双拼', link: '/configs/xiaohe' },
-            { text: '开发环境', link: '/configs/development' },
-            { text: 'Linux', link: '/configs/linux' },
+            { text: 'Linux', link: '/linux/linux' },
           ]
         },
-      ]
+      ],
+      '/windows': [
+        {
+          text: 'Windows',
+          items: [
+            { text: '小鹤双拼', link: '/windows/xiaohe' },
+            { text: '开发环境', link: '/windows/development' },
+          ]
+        },
+      ],
     },
     socialLinks: [
       { icon: 'github', link: 'https://github.com/edwdch/edwdch.github.io' }
