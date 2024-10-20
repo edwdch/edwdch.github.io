@@ -14,11 +14,14 @@ hero:
       link: /windows/xiaohe
 
 features:
-  - title: Feature A
-    details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
-  - title: Feature B
-    details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
-  - title: Feature C
-    details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
+  - title: 极简复现
+    icon: 🏆
+    details: 尽量保持简洁，只记录解决问题的关键步骤
+  - title: 忠于官方
+    icon: 📚
+    details: 尽量使用官方文档和工具，维持一致性
+  - title: 保持更新
+    icon: 🚀
+    details: 保持更新，尽量使用最新的工具和技术
 ---
 
