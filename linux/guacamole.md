@@ -29,10 +29,10 @@ mkdir data
 2. 创建 `docker-compose.yml` 文件。
 
 - `guacd`：guacamole 的代理服务。不会被直接访问。
-- `guacamole`：guacamole 的 Web 服务。需要被访问，这里映射到 11000 端口。
+- `guacamole`：guacamole 的 Web 服务。需要被访问，这里映射到 11000 端口（代码高亮行）。
 - `postgres`：guacamole 的数据库服务。不会被直接访问，密码随意设置。
 
-```yaml
+```yaml{13}
 services:
   guacd:
     image: guacamole/guacd
@@ -118,10 +118,10 @@ docker-compose up -d
 
 - 由于 guacamole 的 Web 页面是通过 HTTP 访问的，建议使用 Nginx 反向代理 guacamole，添加 HTTPS 支持。
 - 这里配置了将 `/` 重定向到 `/guacamole`，避免直接访问的 404 错误。
-- 反向代理的端口为 11000，需要与前面的 `docker-compose.yml` 文件中的端口映射一致。
+- 反向代理的端口为 11000（代码高亮行），需要与前面的 `docker-compose.yml` 文件中的端口映射一致。
 
 
-```nginx
+```nginx{16}
 server {
     listen 443 ssl;
     server_name rdp.example.com;
