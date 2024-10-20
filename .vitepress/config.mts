@@ -47,6 +47,7 @@ export default defineConfig({
           items: [
             { text: 'Linux', link: '/linux/linux' },
             { text: 'Guacamole', link: '/linux/guacamole' },
+            { text: 'VS Code Server', link: '/linux/vscode-server' },
           ]
         },
       ],
