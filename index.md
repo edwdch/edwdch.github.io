@@ -8,7 +8,7 @@ hero:
   actions:
     - theme: brand
       text: Linux
-      link: /linux/linux
+      link: /linux/commands
     - theme: alt
       text: Windows
       link: /windows/xiaohe

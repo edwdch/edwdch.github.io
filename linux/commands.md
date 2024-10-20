@@ -1,6 +1,6 @@
-# Linux
+# Linux Commands
 
-这里是一些使用 Linux 时可能会用到的技巧。
+这里是一些使用 Linux 时可能会用到的命令。
 
 ## 端口占用检查
 
