@@ -4,7 +4,7 @@ layout: home
 
 hero:
   name: "Hey, I'm Edward"
-  text: "This is where I keep some notes."
+  text: "这里会记录一些开发中遇到的问题和解决方案"
   actions:
     - theme: brand
       text: 常用配置
