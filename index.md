@@ -5,6 +5,9 @@ layout: home
 hero:
   name: "Hey, I'm Edward"
   text: "这里会记录一些开发中遇到的问题和解决方案"
+  image:
+    src: /cat.svg
+    alt: 是的，这是一只猫
   actions:
     - theme: brand
       text: Linux
