@@ -23,6 +23,9 @@ export default defineConfig({
         returnToTopLabel: '返回顶部',
         sidebarMenuLabel: '菜单',
         darkModeSwitchLabel: '主题',
+        outline: {
+          label: '大纲',
+        }
         // 其他需要翻译的文本...
       }
     },
@@ -42,6 +45,7 @@ export default defineConfig({
           text: 'Linux',
           items: [
             { text: 'Linux', link: '/linux/linux' },
+            { text: 'Guacamole', link: '/linux/guacamole' },
           ]
         },
       ],
