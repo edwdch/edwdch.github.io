@@ -58,6 +58,7 @@ export default defineConfig({
           items: [
             { text: '小鹤双拼', link: '/windows/xiaohe' },
             { text: '开发环境', link: '/windows/development' },
+            { text: 'Virtual Box', link: '/windows/virtualbox' },
           ]
         },
       ],
