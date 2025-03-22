@@ -38,6 +38,7 @@ export default defineConfig({
       { text: '主页', link: '/' },
       { text: 'Linux', link: '/linux/commands' },
       { text: 'Windows', link: '/windows/xiaohe' },
+      { text: 'MacOS', link: '/macos/setup' },
     ],
     logo: '/favicon.png',
     sidebar: {
@@ -59,6 +60,15 @@ export default defineConfig({
             { text: '小鹤双拼', link: '/windows/xiaohe' },
             { text: '开发环境', link: '/windows/development' },
             { text: 'Virtual Box', link: '/windows/virtualbox' },
+          ]
+        },
+      ],
+      '/macos': [
+        {
+          text: 'MacOS',
+          items: [
+            { text: 'Setup', link: '/macos/setup' },
+            { text: 'Docker', link: '/macos/docker' },
           ]
         },
       ],

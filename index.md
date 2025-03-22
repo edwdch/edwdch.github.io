@@ -15,6 +15,9 @@ hero:
     - theme: alt
       text: Windows
       link: /windows/xiaohe
+    - theme: alt
+      text: MacOS
+      link: /macos/setup
 
 features:
   - title: 极简复现
