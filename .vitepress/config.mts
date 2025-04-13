@@ -49,6 +49,8 @@ export default defineConfig({
             { text: 'Commands', link: '/linux/commands' },
             { text: 'Guacamole', link: '/linux/guacamole' },
             { text: 'VS Code Server', link: '/linux/vscode-server' },
+            { text: 'acme.sh', link: '/linux/acme.sh' },
+            { text: 'Gost', link: '/linux/gost' },
             { text: 'Squid', link: '/linux/squid' },
           ]
         },
