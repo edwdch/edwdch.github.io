@@ -1,4 +1,4 @@
-# Apache Guacamole
+# <DocTitle icon="vscode-icons:file-type-apache" title="Apache Guacamole" />
 
 Apache Guacamole 是一个 HTML5 远程桌面网关，支持 VNC、RDP 和 SSH 协议。它可以让你通过浏览器访问远程服务器，而不需要安装客户端。
 

@@ -1,4 +1,4 @@
-# VS Code Server
+# <DocTitle icon="vscode-icons:file-type-vscode" title="VS Code Server" />
 
 有时候我们需要在远程服务器上进行开发，这时候就需要一个远程的编辑器。VS Code Server 就是一个基于浏览器的远程编辑器，可以在浏览器中使用 VS Code 的功能。
 
