@@ -55,6 +55,7 @@ export default defineConfig({
             { text: 'acme.sh', link: '/linux/acme.sh' },
             { text: 'Gost', link: '/linux/gost' },
             { text: 'Squid', link: '/linux/squid' },
+            { text: 'Authelia', link: '/linux/authelia' },
           ]
         },
       ],
