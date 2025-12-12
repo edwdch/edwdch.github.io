@@ -1,4 +1,4 @@
-# Linux Commands
+# <DocTitle icon="flat-color-icons:linux" title="Linux Commands" />
 
 这里是一些使用 Linux 时可能会用到的命令。
 

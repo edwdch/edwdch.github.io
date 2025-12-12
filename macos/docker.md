@@ -1,10 +1,8 @@
-# Docker
-
-## Docker Cli
+# <DocTitle icon="logos:docker-icon" title="Docker Cli" />
 
 我使用的 Mac Mini M4 版本仅有 16GB 的内存，所以采用 Docker Cli 远程连接到另外一台内存充足的 Linux 服务器来使用 Docker。
 
-## 安装 Docker Cli
+## 安装
 
 ```bash
 brew install docker
