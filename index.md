@@ -16,7 +16,7 @@ hero:
       text: Windows
       link: /windows/xiaohe
     - theme: alt
-      text: MacOS
+      text: macOS
       link: /macos/setup
 
 features:

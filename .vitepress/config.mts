@@ -41,7 +41,8 @@ export default defineConfig({
       { text: '主页', link: '/' },
       { text: 'Linux', link: '/linux/commands' },
       { text: 'Windows', link: '/windows/xiaohe' },
-      { text: 'MacOS', link: '/macos/setup' },
+      { text: 'macOS', link: '/macos/setup' },
+      { text: 'iOS', link: '/ios/surge' },
     ],
     logo: '/favicon.png',
     sidebar: {
@@ -71,13 +72,21 @@ export default defineConfig({
       ],
       '/macos': [
         {
-          text: 'MacOS',
+          text: 'macOS',
           items: [
             { text: 'Setup', link: '/macos/setup' },
             { text: 'Docker', link: '/macos/docker' },
           ]
         },
       ],
+      '/ios': [
+        {
+          text: 'iOS',
+          items: [
+            { text: 'Surge', link: '/ios/surge' },
+          ]
+        }
+      ]
     },
     socialLinks: [
       { icon: 'github', link: 'https://github.com/edwdch/edwdch.github.io' }

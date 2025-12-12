@@ -3,6 +3,7 @@ import { computed } from "vue";
 import { Icon } from "@iconify/vue";
 
 const LOCAL_SVG_PREFIX = "local:";
+const IMAGE_PREFIX = "img:";
 
 // Local SVGs live under: .vitepress/theme/assets/icons/*.svg
 // We load them as raw strings so we can inline them (keeps currentColor + sizing CSS working well).
@@ -40,13 +41,26 @@ const localSvg = computed(() => {
   return localSvgByName[name] ?? null;
 });
 
+const imageUrl = computed(() => {
+  const raw = props.icon?.trim();
+  if (!raw) return null;
+
+  if (!raw.startsWith(IMAGE_PREFIX)) return null;
+
+  const filename = raw.slice(IMAGE_PREFIX.length).trim();
+  if (!filename) return null;
+
+  // 图片统一放在 /.vitepress/theme/assets/img/ 目录下
+  return new URL(`../assets/img/${filename}`, import.meta.url).href;
+});
+
 const iconId = computed(() => {
   const raw = props.icon?.trim();
   if (!raw) return null;
 
   // Prefer Iconify IDs, e.g. "vscode-icons:file-type-vscode".
   // (Dynamic component names won't work reliably with auto-imported icon components.)
-  if (raw.includes(":") && !raw.startsWith(LOCAL_SVG_PREFIX)) return raw;
+  if (raw.includes(":") && !raw.startsWith(LOCAL_SVG_PREFIX) && !raw.startsWith(IMAGE_PREFIX)) return raw;
 
   return null;
 });
@@ -55,6 +69,7 @@ const iconId = computed(() => {
 <template>
   <span class="doc-title">
     <span v-if="localSvg" class="doc-title__local-icon" v-html="localSvg" aria-hidden="true" />
+    <img v-else-if="imageUrl" :src="imageUrl" alt="" class="doc-title__image" aria-hidden="true" />
     <Icon v-else-if="iconId" :icon="iconId" aria-hidden="true" />
     <span>{{ title }}</span>
   </span>
@@ -75,5 +90,11 @@ const iconId = computed(() => {
 .doc-title :deep(svg) {
   width: 1em;
   height: 1em;
+}
+
+.doc-title__image {
+  width: 1em;
+  height: 1em;
+  object-fit: contain;
 }
 </style>
