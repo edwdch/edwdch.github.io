@@ -1,5 +1,8 @@
 import { defineConfig } from 'vitepress'
 import lightbox from "vitepress-plugin-lightbox"
+import Icons from 'unplugin-icons/vite'
+import IconsResolver from 'unplugin-icons/resolver'
+import Components from 'unplugin-vue-components/vite'
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
@@ -112,5 +115,21 @@ export default defineConfig({
       // Use lightbox plugin
       md.use(lightbox, {});
     },
+  },
+  vite: {
+    plugins: [
+      Components({
+        dirs: ['.vitepress/theme/components'], // 指定组件目录
+        include: [/\.vue$/, /\.vue\?vue/, /\.md$/], // 关键：让 Markdown 文件也能识别组件
+        resolvers: [
+          IconsResolver({
+            prefix: 'icon', // 使用组件时的前缀，例如 <icon-mdi-home>
+          }),
+        ],
+      }),
+      Icons({
+        autoInstall: true, // 自动安装缺少的图标集
+      }),
+    ],
   },
 })
