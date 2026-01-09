@@ -9,7 +9,7 @@ export default defineConfig({
   title: "爱德华笔记",
   lang: 'zh-CN',
   description: "爱德华的学习笔记，通常记录一些开发中遇到的问题和解决方案。",
-  cleanUrls: true,
+  cleanUrls: false,
   lastUpdated: true,
   head: [
     ['link', { rel: 'icon', href: '/favicon.png' }]
