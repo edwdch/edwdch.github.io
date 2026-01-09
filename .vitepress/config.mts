@@ -39,7 +39,7 @@ export default defineConfig({
     // https://vitepress.dev/reference/default-theme-config
     nav: [
       { text: '主页', link: '/' },
-      { text: 'Linux', link: '/linux/commands' },
+      { text: 'Linux', link: '/linux/setup' },
       { text: 'Windows', link: '/windows/xiaohe' },
       { text: 'macOS', link: '/macos/setup' },
       { text: 'iOS', link: '/ios/surge' },
@@ -50,9 +50,11 @@ export default defineConfig({
         {
           text: 'Linux',
           items: [
+            { text: 'Setup', link: '/linux/setup' },
+            { text: 'Nginx', link: '/linux/nginx' },
+            { text: 'VS Code Server', link: '/linux/vscode-server' },
             { text: 'Commands', link: '/linux/commands' },
             { text: 'Guacamole', link: '/linux/guacamole' },
-            { text: 'VS Code Server', link: '/linux/vscode-server' },
             { text: 'acme.sh', link: '/linux/acme.sh' },
             { text: 'Gost', link: '/linux/gost' },
             { text: 'Squid', link: '/linux/squid' },

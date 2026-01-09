@@ -20,14 +20,23 @@ sudo apt update
 sudo apt install code
 ```
 
+> [!NOTE]
+> 以上的命令除了安装了几个软件包以外，还写入了 2 个文件。
+> ```bash
+> root@ubuntu-server:~# ll /etc/apt/keyrings | grep 'microsoft'
+> -rw-r--r-- 1 root root 3817 Aug  1  2024 microsoft.gpg
+> 
+> root@ubuntu-server:~# ll /etc/apt/sources.list.d/ | grep 'vscode'
+> -rw-r--r-- 1 root root  112 Aug 15  2024 vscode.list
+> ```
+
 ## 创建服务
 
-1. 创建一个新的 systemd 服务文件 `/etc/systemd/system/code-server.service`。
+新建一个 `systemd` 服务文件 `/etc/systemd/system/code-server.service`。
 
-- 这里使用了 root 账户启动，如果需要使用其他账户，需要修改 `User` 字段。
-- 启动命令中配置了 `--without-connection-token`，这意味没有连接令牌，任何人都可以连接到服务器。如果暴露到公网，需要先使用 nginx 等反向代理进行安全配置。
+::: code-group
 
-```ini
+```ini [/etc/systemd/system/code-server.service]
 [Unit]
 Description=VS Code Server
 After=network.target
@@ -43,7 +52,13 @@ Restart=on-failure
 WantedBy=multi-user.target
 ```
 
-2. 启动并设置开机自启。
+:::
+
+> [!IMPORTANT]
+> 1. 这里使用了 root 账户启动，如果需要使用其他账户，需要修改 `User` 字段。但是这也会限制启动后的 VS Code 的访问权限。
+> 2. 启动命令中配置了 `--without-connection-token`，这意味没有连接令牌，任何人都可以连接到服务器。如果暴露到公网，需要先使用 nginx 等反向代理进行安全配置。
+
+启动并设置开机自启。
 
 ```bash
 sudo systemctl daemon-reload
@@ -51,13 +66,17 @@ sudo systemctl enable code-server
 sudo systemctl start code-server
 ```
 
-3. 现在可以通过 `http://<server_ip>:8886` 访问 VS Code Server 的 Web 页面。
+::: details 如果你不熟悉 systemd 的话，点这里查看
+1. `daemon-reload` 命令会重新加载 `systemd` 的配置文件，以便识别新添加或修改的服务文件。每次你添加或修改服务文件后，都需要运行这个命令。
+2. `enable` 命令会设置服务在系统启动时自动运行。
+3. `start` 命令会立即启动服务。
+:::
+
+现在可以通过 `http://<server_ip>:8886` 访问 VS Code Server 的 Web 页面。
 
 ## Nginx 配置
 
 在 HTTP 环境下，VS Code 的部分功能将受到限制。建议使用 Nginx 反向代理 VS Code Server，添加 HTTPS 支持和 Basic Auth 认证。
-
-1. 生成密钥
 
 这里使用 htpasswd 生成一个密码文件。账号为 `coder`，密码为 `coder_pass`，并将文件移动到 `/etc/nginx/`。
 
@@ -66,9 +85,11 @@ htpasswd -bc ./passwd coder coder_pass
 sudo mv ./passwd /etc/nginx/
 ```
 
-2. 配置 Nginx
+添加 Nginx 配置文件 `/etc/nginx/conf.d/code-server.conf`。
 
-```nginx
+::: code-group
+
+```nginx [/etc/nginx/conf.d/code-server.conf]
 server {
     listen 443 ssl;
     server_name code.example.com;
@@ -76,34 +97,22 @@ server {
     auth_basic "Restricted Area";
     auth_basic_user_file /etc/nginx/.htpasswd;
 
-    ssl_certificate /etc/nginx/ssl/code.example.com.fullchain.pem;
-    ssl_certificate_key /etc/nginx/ssl/code.example.com.key.pem;
-
-    ssl_protocols TLSv1.2 TLSv1.3;
-    ssl_ciphers 'TLS_AES_128_GCM_SHA256:TLS_AES_256_GCM_SHA384:TLS_CHACHA20_POLY1305_SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-RSA-AES256-GCM-SHA384';
+    include /etc/nginx/snippets/example.com-ssl.conf;
 
     location / {
         proxy_pass http://localhost:8886;
-
-        proxy_set_header Host $host;
-        proxy_set_header X-Real-IP $remote_addr;
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_set_header X-Forwarded-Proto $scheme;
-        proxy_set_header X-Forwarded-Host $host:$server_port;
-
-        # WebSocket
-        proxy_http_version 1.1;
-        proxy_set_header Upgrade $http_upgrade;
-        proxy_set_header Connection "upgrade";
         
-        proxy_buffering off;
-        proxy_connect_timeout 10s;
-        proxy_send_timeout 3600s;
-        proxy_read_timeout 3600s;
-        tcp_nodelay on;
+        include /etc/nginx/snippets/proxy-headers.conf;
+        include /etc/nginx/snippets/websocket.conf;
     }
 }
 ```
+
+:::
+
+::: info
+代码里用到的 `example.com-ssl.conf`, `proxy-headers.conf` 和 `websocket.conf` 片段配置请参考 [Nginx 章节](./nginx.md#片段配置)。
+:::
 
 ## 注意事项
 
