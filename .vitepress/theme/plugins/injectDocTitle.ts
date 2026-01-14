@@ -5,19 +5,26 @@ export function injectDocTitle(md: MarkdownIt & MarkdownRenderer) {
   const originalRender = md.render.bind(md)
   
   md.render = function (src: string, env?: any): string {
-    const result = originalRender(src, env)
+    let result = originalRender(src, env)
+    const frontmatter = env?.frontmatter
     
-    // Check if frontmatter has title
-    if (env?.frontmatter?.title) {
-      const title = env.frontmatter.title
-      const icon = env.frontmatter.icon || ''
-      
-      // Insert DocTitle at the beginning
-      const docTitleTag = `<h1><DocTitle title="${title}" ${icon ? `icon="${icon}"` : ''} /></h1>\n`
-      return docTitleTag + result
+    let prefix = ''
+    
+    // Insert VariablesEditor if variables exist (it will handle all replacements client-side)
+    if (frontmatter?.variables && Object.keys(frontmatter.variables).length > 0) {
+      const variablesBase64 = btoa(JSON.stringify(frontmatter.variables))
+      prefix += `<VariablesEditor variables-base64="${variablesBase64}" />\n`
     }
     
-    return result
+    // Insert DocTitle if title exists
+    if (frontmatter?.title) {
+      const title = frontmatter.title
+      const icon = frontmatter.icon || ''
+      prefix = `<h1><DocTitle title="${title}" ${icon ? `icon="${icon}"` : ''} /></h1>\n` + prefix
+    }
+    
+    return prefix + result
   }
 }
+
 

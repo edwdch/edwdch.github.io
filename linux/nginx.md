@@ -1,6 +1,8 @@
 ---
 title: Nginx
-icon: img:nginx.webp
+icon: nginx.webp
+variables:
+  domain: example.com
 ---
 
 在 Linux 部署多种服务时，Nginx 是绕不开的一个组件。它是一个高性能的反向代理服务器,可以为你部署的各种服务提供 HTTPS 支持和访问控制。
@@ -49,13 +51,13 @@ sudo systemctl restart nginx
 
 ### SSL 证书片段
 
-假设你为 `example.com` 申请了通用证书 `example.com.fullchain.pem` 和私钥 `example.com.key.pem`。将它们放在 `/etc/nginx/ssl/` 目录下，然后新建一个配置片段文件 `/etc/nginx/snippets/example.com-ssl.conf`，内容如下：
+假设你为 $[domain] 申请了通用证书 `$[domain].fullchain.pem` 和私钥 `$[domain].key.pem`。将它们放在 `/etc/nginx/ssl/` 目录下，然后新建一个配置片段文件 `/etc/nginx/snippets/$[domain]-ssl.conf`，内容如下：
 
 ::: code-group
 
-```nginx [/etc/nginx/snippets/example.com-ssl.conf]
-ssl_certificate /etc/nginx/ssl/example.com.fullchain.pem;
-ssl_certificate_key /etc/nginx/ssl/example.com.key.pem;
+```nginx [/etc/nginx/snippets/$[domain]-ssl.conf]
+ssl_certificate /etc/nginx/ssl/$[domain].fullchain.pem;
+ssl_certificate_key /etc/nginx/ssl/$[domain].key.pem;
 ```
 
 :::
