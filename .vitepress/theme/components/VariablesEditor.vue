@@ -115,81 +115,26 @@ watch(values, () => {
 </script>
 
 <template>
-  <div class="variables-editor">
-    <div class="variables-editor__header">
-      <span>这篇文章里面有一些变量，你可以手动修改它们的值，文章内容将对应更新</span>
+  <div class="my-4 border border-[var(--vp-c-divider)] rounded-lg overflow-hidden bg-[var(--vp-c-bg-soft)]">
+    <div class="flex items-center gap-2 px-4 py-3 bg-[var(--vp-c-bg-alt)] border-b border-[var(--vp-c-divider)]">
+      <span class="i-carbon-settings-adjust inline-block text-base text-[var(--vp-c-text-2)]" aria-hidden="true"></span>
+      <span class="text-[0.85rem] text-[var(--vp-c-text-2)] leading-relaxed">变量设置</span>
     </div>
-    <div class="variables-editor__content">
-      <div v-for="(, key) in variables" :key="key" class="variables-editor__row">
-        <label :for="`var-${key}`" class="variables-editor__label">{{ key }}</label>
+    <div class="px-4 py-4 flex flex-col gap-3">
+      <div v-for="(, key) in variables" :key="key" class="flex items-center gap-4">
+        <label 
+          :for="`var-${key}`" 
+          class="min-w-[120px] font-mono text-sm text-[var(--vp-c-text-2)]"
+        >
+          {{ key }}
+        </label>
         <input
           :id="`var-${key}`"
           v-model="values[key]"
           type="text"
-          class="variables-editor__input"
+          class="flex-1 px-3 py-2 border border-[var(--vp-c-divider)] rounded bg-[var(--vp-c-bg)] text-[var(--vp-c-text-1)] font-mono text-sm transition-colors duration-250 outline-none focus:border-[var(--vp-c-brand-1)]"
         />
       </div>
     </div>
   </div>
 </template>
-
-<style scoped>
-.variables-editor {
-  margin: 1rem 0;
-  border: 1px solid var(--vp-c-divider);
-  border-radius: 8px;
-  overflow: hidden;
-  background: var(--vp-c-bg-soft);
-}
-
-.variables-editor__header {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.75rem 1rem;
-  background: var(--vp-c-bg-alt);
-  border-bottom: 1px solid var(--vp-c-divider);
-  font-size: 0.9rem;
-}
-
-.variables-editor__icon {
-  font-size: 1rem;
-}
-
-.variables-editor__content {
-  padding: 1rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-}
-
-.variables-editor__row {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-}
-
-.variables-editor__label {
-  min-width: 120px;
-  font-family: var(--vp-font-family-mono);
-  font-size: 0.875rem;
-  color: var(--vp-c-text-2);
-}
-
-.variables-editor__input {
-  flex: 1;
-  padding: 0.5rem 0.75rem;
-  border: 1px solid var(--vp-c-divider);
-  border-radius: 4px;
-  background: var(--vp-c-bg);
-  color: var(--vp-c-text-1);
-  font-family: var(--vp-font-family-mono);
-  font-size: 0.875rem;
-  transition: border-color 0.25s;
-}
-
-.variables-editor__input:focus {
-  outline: none;
-  border-color: var(--vp-c-brand-1);
-}
-</style>

@@ -3,6 +3,7 @@ import lightbox from "vitepress-plugin-lightbox"
 import Icons from 'unplugin-icons/vite'
 import IconsResolver from 'unplugin-icons/resolver'
 import Components from 'unplugin-vue-components/vite'
+import UnoCSS from 'unocss/vite'
 import { injectDocTitle } from './theme/plugins/injectDocTitle'
 
 // https://vitepress.dev/reference/site-config
@@ -134,6 +135,7 @@ export default defineConfig({
   },
   vite: {
     plugins: [
+      UnoCSS(),
       Components({
         dirs: ['.vitepress/theme/components'], // 指定组件目录
         include: [/\.vue$/, /\.vue\?vue/, /\.md$/], // 关键：让 Markdown 文件也能识别组件

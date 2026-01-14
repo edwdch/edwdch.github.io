@@ -59,29 +59,15 @@ const imageUrl = computed(() => {
 </script>
 
 <template>
-  <span class="doc-title">
-    <span v-if="svgContent" class="doc-title__icon" v-html="svgContent" aria-hidden="true" />
-    <img v-else-if="imageUrl" :src="imageUrl" alt="" class="doc-title__icon" aria-hidden="true" />
+  <span class="inline-flex items-center gap-2">
+    <span v-if="svgContent" class="doc-title-icon inline-flex items-center size-[1em] object-contain" v-html="svgContent" aria-hidden="true" />
+    <img v-else-if="imageUrl" :src="imageUrl" alt="" class="inline-flex items-center size-[1em] object-contain" aria-hidden="true" />
     <span>{{ title }}</span>
   </span>
 </template>
 
 <style scoped>
-.doc-title {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.doc-title__icon {
-  display: inline-flex;
-  align-items: center;
-  width: 1em;
-  height: 1em;
-  object-fit: contain;
-}
-
-.doc-title :deep(svg) {
+.doc-title-icon :deep(svg) {
   width: 1em;
   height: 1em;
 }
