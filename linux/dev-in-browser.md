@@ -2,7 +2,9 @@
 title: 基于浏览器的远程开发解决方案
 icon: chrome.webp
 variables:
-  domain: example.com
+  - key: domain
+    default: example.com
+    label: "主域名"
 ---
 
 本文介绍一个基于浏览器的远程开发解决方案，允许你在任何设备上通过浏览器访问完整的开发环境，而无需安装任何本地软件。

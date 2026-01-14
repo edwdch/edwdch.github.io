@@ -2,8 +2,12 @@
 title: Linux 服务器起步
 icon: ubuntu.webp
 variables:
-  GitUsername: "someone"
-  GitEmail: "someone@example.com"
+  - key: GIT_USERNAME
+    default: someone
+    label: "Git 用户名"
+  - key: GIT_EMAIL
+    default: someone@example.com
+    label: "Git 邮箱"
 ---
 
 我编写这篇文章时，已经使用 Linux 服务器作为我远程开发的环境有一段时间了，在使用过程中，我逐渐积累了一些经验，也发现了当初的配置存在一些问题。所以希望从一个全新开始的角度，来写一篇 Linux 服务器起步配置的文档。
@@ -120,8 +124,8 @@ sudo apt install git
 初始化 Git 的全局配置：
 
 ```bash
-git config --global user.name "$[GitUsername]"
-git config --global user.email "$[GitEmail]"
+git config --global user.name "$[GIT_USERNAME]"
+git config --global user.email "$[GIT_EMAIL]"
 ```
 
 ## 目录规划

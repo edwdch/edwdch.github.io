@@ -3,9 +3,23 @@ import { watch, provide, reactive, computed, onMounted, nextTick } from 'vue'
 import { Settings, RotateCcw, X } from 'lucide-vue-next'
 import { startCase } from 'lodash-es'
 
+interface VariableDefinition {
+  key: string
+  default: string
+  label?: string
+  desc?: string
+}
+
 const props = defineProps<{
   variablesBase64: string
 }>()
+
+// Helper function to decode base64 with Unicode support
+const decodeBase64 = (str: string): string => {
+  const binaryString = atob(str)
+  const bytes = Uint8Array.from(binaryString, char => char.charCodeAt(0))
+  return new TextDecoder('utf-8').decode(bytes)
+}
 
 // Generate storage key based on variables base64
 const storageKey = computed(() => {
@@ -44,12 +58,30 @@ const clearStorage = () => {
 }
 
 // Decode variables from base64
-const variables = computed(() => {
+const variableDefinitions = computed((): VariableDefinition[] => {
   try {
-    return JSON.parse(atob(props.variablesBase64)) as Record<string, string>
+    const parsed = JSON.parse(decodeBase64(props.variablesBase64))
+    // Support both old format (Record<string, string>) and new format (VariableDefinition[])
+    if (Array.isArray(parsed)) {
+      return parsed
+    }
+    // Convert old format to new format
+    return Object.entries(parsed).map(([key, value]) => ({
+      key,
+      default: value as string,
+    }))
   } catch {
-    return {}
+    return []
   }
+})
+
+// Create a map for quick lookup
+const variablesMap = computed(() => {
+  const map: Record<string, VariableDefinition> = {}
+  variableDefinitions.value.forEach(v => {
+    map[v.key] = v
+  })
+  return map
 })
 
 // Create reactive state for variables
@@ -85,14 +117,14 @@ const formatKey = (key: string): string => {
 }
 
 // Initialize values when variables change
-watch(variables, (newVars) => {
+watch(variableDefinitions, (newVars) => {
   const savedValues = loadFromStorage()
   
-  Object.keys(newVars).forEach(key => {
+  newVars.forEach(({ key, default: defaultValue }) => {
     if (!(key in values)) {
-      initialValues[key] = newVars[key]
+      initialValues[key] = defaultValue
       // Use saved value if available, otherwise use initial value
-      values[key] = savedValues?.[key] ?? newVars[key]
+      values[key] = savedValues?.[key] ?? defaultValue
     }
   })
 }, { immediate: true })
@@ -116,9 +148,36 @@ const replaceVariables = () => {
   
   const content = document.querySelector('.vp-doc')
   if (!content) return
+
+  // Handle code blocks separately - they may have syntax highlighting that splits variables
+  // e.g., $[email] might become <span>$</span><span>[email]</span>
+  content.querySelectorAll('pre code').forEach(codeBlock => {
+    const html = codeBlock.innerHTML
+    // Match $[varName] that may be split across multiple spans
+    // This regex handles: $[var], $</span><span>[var], $</span><span...>[var] etc.
+    const regex = /\$(?:<\/span>)?(?:<span[^>]*>)?\[(\w+)\]/g
+    
+    if (regex.test(html)) {
+      // Reset regex lastIndex after test()
+      regex.lastIndex = 0
+      codeBlock.innerHTML = html.replace(regex, (_, varName) => {
+        const value = values[varName] || variablesMap.value[varName]?.default || varName
+        return `<span class="page-variable" data-var-name="${varName}">${value}</span>`
+      })
+    }
+  })
   
-  // Walk through all text nodes and replace $[varName]
-  const walker = document.createTreeWalker(content, NodeFilter.SHOW_TEXT, null)
+  // Walk through all text nodes and replace $[varName] (for non-code content)
+  const walker = document.createTreeWalker(content, NodeFilter.SHOW_TEXT, {
+    acceptNode: (node) => {
+      // Skip nodes inside code blocks (already processed) and inside page-variable spans
+      const parent = node.parentElement
+      if (parent?.closest('pre code') || parent?.classList.contains('page-variable')) {
+        return NodeFilter.FILTER_REJECT
+      }
+      return NodeFilter.FILTER_ACCEPT
+    }
+  })
   const nodesToReplace: { node: Text, matches: { start: number, end: number, varName: string }[] }[] = []
   
   let node: Text | null
@@ -157,7 +216,7 @@ const replaceVariables = () => {
       const span = document.createElement('span')
       span.className = 'page-variable'
       span.dataset.varName = varName
-      span.textContent = values[varName] || variables.value[varName] || varName
+      span.textContent = values[varName] || variablesMap.value[varName]?.default || varName
       fragment.appendChild(span)
       
       lastIndex = end
@@ -207,36 +266,43 @@ watch(values, () => {
         class="flex items-center gap-1.5 px-2.5 py-1.5 text-xs text-[var(--vp-c-text-2)] hover:text-[var(--vp-c-text-1)] bg-[var(--vp-c-bg)] hover:bg-[var(--vp-c-bg-soft)] border border-[var(--vp-c-divider)] rounded transition-all cursor-pointer"
         :class="{ 'invisible pointer-events-none': !hasAnyModification }"
         title="重置所有变量"
+        tabindex="-1"
       >
         <RotateCcw :size="14" />
         <span>重置</span>
       </button>
     </div>
     <div class="px-4 py-4 flex flex-col gap-3">
-      <div v-for="(, key) in variables" :key="key" class="flex items-center gap-4">
-        <label 
-          :for="`var-${key}`" 
-          class="min-w-[120px] text-sm text-[var(--vp-c-text-2)]"
-        >
-          {{ formatKey(key) }}
-        </label>
-        <div class="flex-1 relative">
-          <input
-            :id="`var-${key}`"
-            v-model="values[key]"
-            type="text"
-            class="w-full px-3 py-2 border border-[var(--vp-c-divider)] rounded bg-[var(--vp-c-bg)] text-[var(--vp-c-text-1)] font-mono text-sm transition-colors duration-250 outline-none focus:border-[var(--vp-c-brand-1)]"
-            :class="{ 'pr-9': isModified(key) }"
-          />
-          <button
-            v-if="isModified(key)"
-            @click="resetVariable(key)"
-            class="absolute right-2 top-1/2 -translate-y-1/2 p-1 text-[var(--vp-c-text-3)] hover:text-[var(--vp-c-text-1)] transition-colors cursor-pointer"
-            :title="`重置 ${key}`"
+      <div v-for="variable in variableDefinitions" :key="variable.key" class="flex flex-col gap-1">
+        <div class="flex items-center gap-4">
+          <label 
+            :for="`var-${variable.key}`" 
+            class="min-w-[120px] text-sm text-[var(--vp-c-text-2)]"
           >
-            <X :size="16" />
-          </button>
+            {{ variable.label || formatKey(variable.key) }}
+          </label>
+          <div class="flex-1 relative">
+            <input
+              :id="`var-${variable.key}`"
+              v-model="values[variable.key]"
+              type="text"
+              class="w-full px-3 py-2 border border-[var(--vp-c-divider)] rounded bg-[var(--vp-c-bg)] text-[var(--vp-c-text-1)] font-mono text-sm transition-colors duration-250 outline-none focus:border-[var(--vp-c-brand-1)]"
+              :class="{ 'pr-9': isModified(variable.key) }"
+            />
+            <button
+              v-if="isModified(variable.key)"
+              @click="resetVariable(variable.key)"
+              class="absolute right-2 top-1/2 -translate-y-1/2 p-1 text-[var(--vp-c-text-3)] hover:text-[var(--vp-c-text-1)] transition-colors cursor-pointer"
+              :title="`重置 ${variable.key}`"
+              tabindex="-1"
+            >
+              <X :size="16" />
+            </button>
+          </div>
         </div>
+        <p v-if="variable.desc" class="ml-[136px] text-xs text-[var(--vp-c-text-3)]">
+          {{ variable.desc }}
+        </p>
       </div>
     </div>
   </div>
