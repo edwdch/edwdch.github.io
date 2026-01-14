@@ -1,9 +1,46 @@
 <script setup lang="ts">
 import { watch, provide, reactive, computed, onMounted, nextTick } from 'vue'
+import { RotateCcw, X } from 'lucide-vue-next'
 
 const props = defineProps<{
   variablesBase64: string
 }>()
+
+// Generate storage key based on variables base64
+const storageKey = computed(() => {
+  return `vitepress-variables-${props.variablesBase64.slice(0, 16)}`
+})
+
+// Load saved values from localStorage
+const loadFromStorage = (): Record<string, string> | null => {
+  if (typeof localStorage === 'undefined') return null
+  try {
+    const saved = localStorage.getItem(storageKey.value)
+    return saved ? JSON.parse(saved) : null
+  } catch {
+    return null
+  }
+}
+
+// Save values to localStorage
+const saveToStorage = (values: Record<string, string>) => {
+  if (typeof localStorage === 'undefined') return
+  try {
+    localStorage.setItem(storageKey.value, JSON.stringify(values))
+  } catch (error) {
+    console.error('Failed to save to localStorage:', error)
+  }
+}
+
+// Clear values from localStorage
+const clearStorage = () => {
+  if (typeof localStorage === 'undefined') return
+  try {
+    localStorage.removeItem(storageKey.value)
+  } catch (error) {
+    console.error('Failed to clear localStorage:', error)
+  }
+}
 
 // Decode variables from base64
 const variables = computed(() => {
@@ -16,15 +53,53 @@ const variables = computed(() => {
 
 // Create reactive state for variables
 const values = reactive<Record<string, string>>({})
+const initialValues = reactive<Record<string, string>>({})
+
+// Check if a variable has been modified
+const isModified = (key: string) => {
+  return values[key] !== initialValues[key]
+}
+
+// Check if any variable has been modified
+const hasAnyModification = computed(() => {
+  return Object.keys(values).some(key => isModified(key))
+})
+
+// Reset a single variable
+const resetVariable = (key: string) => {
+  values[key] = initialValues[key]
+}
+
+// Reset all variables
+const resetAll = () => {
+  Object.keys(initialValues).forEach(key => {
+    values[key] = initialValues[key]
+  })
+  clearStorage()
+}
 
 // Initialize values when variables change
 watch(variables, (newVars) => {
+  const savedValues = loadFromStorage()
+  
   Object.keys(newVars).forEach(key => {
     if (!(key in values)) {
-      values[key] = newVars[key]
+      initialValues[key] = newVars[key]
+      // Use saved value if available, otherwise use initial value
+      values[key] = savedValues?.[key] ?? newVars[key]
     }
   })
 }, { immediate: true })
+
+// Save to localStorage when values change
+watch(values, (newValues) => {
+  // Only save if there are modifications
+  if (hasAnyModification.value) {
+    saveToStorage(newValues)
+  } else {
+    clearStorage()
+  }
+}, { deep: true })
 
 // Provide values to child components
 provide('pageVariables', values)
@@ -116,9 +191,20 @@ watch(values, () => {
 
 <template>
   <div class="my-4 border border-[var(--vp-c-divider)] rounded-lg overflow-hidden bg-[var(--vp-c-bg-soft)]">
-    <div class="flex items-center gap-2 px-4 py-3 bg-[var(--vp-c-bg-alt)] border-b border-[var(--vp-c-divider)]">
-      <span class="i-carbon-settings-adjust inline-block text-base text-[var(--vp-c-text-2)]" aria-hidden="true"></span>
-      <span class="text-[0.85rem] text-[var(--vp-c-text-2)] leading-relaxed">变量设置</span>
+    <div class="flex items-center justify-between px-4 py-3 bg-[var(--vp-c-bg-alt)] border-b border-[var(--vp-c-divider)]">
+      <div class="flex items-center gap-2">
+        <span class="i-carbon-settings-adjust inline-block text-base text-[var(--vp-c-text-2)]" aria-hidden="true"></span>
+        <span class="text-[0.85rem] text-[var(--vp-c-text-2)] leading-relaxed">变量设置</span>
+      </div>
+      <button
+        @click="resetAll"
+        class="flex items-center gap-1.5 px-2.5 py-1.5 text-xs text-[var(--vp-c-text-2)] hover:text-[var(--vp-c-text-1)] bg-[var(--vp-c-bg)] hover:bg-[var(--vp-c-bg-soft)] border border-[var(--vp-c-divider)] rounded transition-all cursor-pointer"
+        :class="{ 'invisible pointer-events-none': !hasAnyModification }"
+        title="重置所有变量"
+      >
+        <RotateCcw :size="14" />
+        <span>重置</span>
+      </button>
     </div>
     <div class="px-4 py-4 flex flex-col gap-3">
       <div v-for="(, key) in variables" :key="key" class="flex items-center gap-4">
@@ -128,12 +214,23 @@ watch(values, () => {
         >
           {{ key }}
         </label>
-        <input
-          :id="`var-${key}`"
-          v-model="values[key]"
-          type="text"
-          class="flex-1 px-3 py-2 border border-[var(--vp-c-divider)] rounded bg-[var(--vp-c-bg)] text-[var(--vp-c-text-1)] font-mono text-sm transition-colors duration-250 outline-none focus:border-[var(--vp-c-brand-1)]"
-        />
+        <div class="flex-1 relative">
+          <input
+            :id="`var-${key}`"
+            v-model="values[key]"
+            type="text"
+            class="w-full px-3 py-2 border border-[var(--vp-c-divider)] rounded bg-[var(--vp-c-bg)] text-[var(--vp-c-text-1)] font-mono text-sm transition-colors duration-250 outline-none focus:border-[var(--vp-c-brand-1)]"
+            :class="{ 'pr-9': isModified(key) }"
+          />
+          <button
+            v-if="isModified(key)"
+            @click="resetVariable(key)"
+            class="absolute right-2 top-1/2 -translate-y-1/2 p-1 text-[var(--vp-c-text-3)] hover:text-[var(--vp-c-text-1)] transition-colors cursor-pointer"
+            :title="`重置 ${key}`"
+          >
+            <X :size="16" />
+          </button>
+        </div>
       </div>
     </div>
   </div>

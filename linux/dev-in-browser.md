@@ -1,6 +1,8 @@
 ---
 title: 基于浏览器的远程开发解决方案
 icon: chrome.webp
+variables:
+  domain: example.com
 ---
 
 本文介绍一个基于浏览器的远程开发解决方案，允许你在任何设备上通过浏览器访问完整的开发环境，而无需安装任何本地软件。
@@ -9,17 +11,11 @@ icon: chrome.webp
 
 ## 推荐配置流程顺序
 
-请参考 <PostLink href="./setup" /> 来完成基础环境的搭建。
-
-此时你应该可以通过 SSH 访问你的服务器。
-
-阅读 <PostLink href="./nginx" /> 和 <PostLink href="./acme.sh" /> 来配置好 Nginx 和 SSL 证书。
-
-阅读 <PostLink href="./authelia" /> 来配置好内网统一认证方案，保护你的开发环境不被未授权访问。
-
-阅读 <PostLink href="./vscode-server" /> 配置好网页版本的 VS Code，你便可以通过浏览器来访问服务器，方便后面的配置。
-
-阅读 <PostLink href="./ttyd" /> 来配置好通过网页访问终端，防止 VS Code 无法访问时，紧急情况下还能通过网页终端进行维护。
+1. 阅读 <PostLink href="./setup" /> 来完成基础环境的搭建。
+2. 阅读 <PostLink href="./nginx" /> 和 <PostLink href="./acme.sh" /> 来配置好 Nginx 和 SSL 证书。
+3. 阅读 <PostLink href="./authelia" /> 来配置好内网统一认证方案，保护你的开发环境不被未授权访问。
+4. 阅读 <PostLink href="./vscode-server" /> 配置好网页版本的 VS Code，你便可以通过浏览器来访问服务器，方便后面的配置。
+5. 阅读 <PostLink href="./ttyd" /> 来配置好通过网页访问终端，防止 VS Code 无法访问时，紧急情况下还能通过网页终端进行维护。
 
 ### Windows 访问
 
@@ -33,15 +29,15 @@ icon: chrome.webp
 
 ## DNS 配置
 
-假设你有一个域名 `example.com`，我建议你为每个服务都配置一个子域名。
+假设你有一个域名 `$[domain]`，我建议你为每个服务都配置一个子域名。
 
-首先是内网的 DNS 解析，先给 linux 服务器 IP 配置一个内网域名 `dev.example.com`，然后给每个服务配置子域名：
+首先是内网的 DNS 解析，先给 linux 服务器 IP 配置一个内网域名 `dev.$[domain]`，然后给每个服务配置子域名：
 
 | 服务       | 子域名                     | 类型 | 指向       |
 | ---------- | -------------------------- | ---- | ----------- |
-| Linux | dev.example.com       | A    | 内网 IP |
-| Gost | gost.example.com      | A | 公网 IP |
-| VS Code    | code.example.com     | CNAME| dev.example.com |
-| Apache Guacamole | rdp.example.com      | CNAME| dev.example.com |
-| Authelia  | auth.example.com     | CNAME| dev.example.com |
-| TTYD       | console.example.com  | CNAME| dev.example.com |
+| Linux | dev.$[domain]       | A    | 内网 IP |
+| Gost | gost.$[domain]      | A | 公网 IP |
+| VS Code    | code.$[domain]     | CNAME| dev.$[domain] |
+| Apache Guacamole | rdp.$[domain]      | CNAME| dev.$[domain] |
+| Authelia  | auth.$[domain]     | CNAME| dev.$[domain] |
+| TTYD       | console.$[domain]  | CNAME| dev.$[domain] |

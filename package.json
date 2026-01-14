@@ -5,6 +5,7 @@
     "@iconify/vue": "^5.0.0",
     "@types/markdown-it": "^14.1.2",
     "@unocss/reset": "^66.6.0",
+    "lucide-vue-next": "^0.562.0",
     "medium-zoom": "^1.1.0",
     "taze": "^19.9.2",
     "unocss": "^66.6.0",
