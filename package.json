@@ -3,8 +3,10 @@
   "devDependencies": {
     "@iconify/json": "^2.2.428",
     "@iconify/vue": "^5.0.0",
+    "@types/lodash-es": "^4.17.12",
     "@types/markdown-it": "^14.1.2",
     "@unocss/reset": "^66.6.0",
+    "lodash-es": "^4.17.22",
     "lucide-vue-next": "^0.562.0",
     "medium-zoom": "^1.1.0",
     "taze": "^19.9.2",

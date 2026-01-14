@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { watch, provide, reactive, computed, onMounted, nextTick } from 'vue'
-import { RotateCcw, X } from 'lucide-vue-next'
+import { Settings, RotateCcw, X } from 'lucide-vue-next'
+import { startCase } from 'lodash-es'
 
 const props = defineProps<{
   variablesBase64: string
@@ -76,6 +77,11 @@ const resetAll = () => {
     values[key] = initialValues[key]
   })
   clearStorage()
+}
+
+// Format variable key for display using lodash startCase
+const formatKey = (key: string): string => {
+  return startCase(key)
 }
 
 // Initialize values when variables change
@@ -190,10 +196,10 @@ watch(values, () => {
 </script>
 
 <template>
-  <div class="my-4 border border-[var(--vp-c-divider)] rounded-lg overflow-hidden bg-[var(--vp-c-bg-soft)]">
+  <div class="mt-4 mb-5 border border-[var(--vp-c-divider)] rounded-lg overflow-hidden bg-[var(--vp-c-bg-soft)]">
     <div class="flex items-center justify-between px-4 py-3 bg-[var(--vp-c-bg-alt)] border-b border-[var(--vp-c-divider)]">
       <div class="flex items-center gap-2">
-        <span class="i-carbon-settings-adjust inline-block text-base text-[var(--vp-c-text-2)]" aria-hidden="true"></span>
+        <Settings :size="16" class="text-[var(--vp-c-text-2)]" aria-hidden="true" />
         <span class="text-[0.85rem] text-[var(--vp-c-text-2)] leading-relaxed">变量设置</span>
       </div>
       <button
@@ -210,9 +216,9 @@ watch(values, () => {
       <div v-for="(, key) in variables" :key="key" class="flex items-center gap-4">
         <label 
           :for="`var-${key}`" 
-          class="min-w-[120px] font-mono text-sm text-[var(--vp-c-text-2)]"
+          class="min-w-[120px] text-sm text-[var(--vp-c-text-2)]"
         >
-          {{ key }}
+          {{ formatKey(key) }}
         </label>
         <div class="flex-1 relative">
           <input
