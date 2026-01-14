@@ -1,15 +1,15 @@
 {
-  "packageManager": "pnpm@10.25.0",
+  "packageManager": "pnpm@10.28.0",
   "devDependencies": {
-    "@iconify/json": "^2.2.417",
+    "@iconify/json": "^2.2.428",
     "@iconify/vue": "^5.0.0",
     "medium-zoom": "^1.1.0",
     "taze": "^19.9.2",
-    "unplugin-icons": "^22.5.0",
+    "unplugin-icons": "^23.0.1",
     "unplugin-vue-components": "^30.0.0",
     "vitepress": "^1.6.4",
     "vitepress-plugin-lightbox": "^1.0.3",
-    "vue": "^3.5.25"
+    "vue": "^3.5.26"
   },
   "scripts": {
     "dev": "vitepress dev --host",
