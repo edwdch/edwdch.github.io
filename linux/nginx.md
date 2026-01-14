@@ -1,6 +1,9 @@
-# <DocTitle icon="img:nginx.webp" title="Nginx" />
+---
+title: Nginx
+icon: img:nginx.webp
+---
 
-在 Linux 部署多种服务时，Nginx 是绕不开的一个组件。它是一个高性能的反向代理服务器，可以为你部署的各种服务提供 HTTPS 支持和访问控制。
+在 Linux 部署多种服务时，Nginx 是绕不开的一个组件。它是一个高性能的反向代理服务器,可以为你部署的各种服务提供 HTTPS 支持和访问控制。
 
 ## 安装 Nginx
 

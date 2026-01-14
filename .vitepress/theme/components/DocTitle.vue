@@ -1,25 +1,40 @@
 <script setup lang="ts">
 import { computed } from "vue";
-import { Icon } from "@iconify/vue";
 
-const LOCAL_SVG_PREFIX = "local:";
-const IMAGE_PREFIX = "img:";
-
-// Local SVGs live under: .vitepress/theme/assets/icons/*.svg
-// We load them as raw strings so we can inline them (keeps currentColor + sizing CSS working well).
-const localSvgRawByPath = import.meta.glob("../assets/icons/*.svg", {
+// Load SVG files as raw content for inline rendering
+const svgFiles = import.meta.glob("../assets/icons/*.svg", {
   eager: true,
   query: "?raw",
   import: "default",
 }) as Record<string, string>;
 
-const localSvgByName: Record<string, string> = Object.fromEntries(
-  Object.entries(localSvgRawByPath)
-    .map(([filePath, svg]) => {
-      const match = filePath.match(/\/([^/]+)\.svg$/);
-      const name = match?.[1];
-      if (!name) return null;
-      return [name, svg] as const;
+// Load image files as URLs
+const imageFiles = import.meta.glob("../assets/icons/*.{webp,png,jpg,jpeg,gif}", {
+  eager: true,
+  query: "?url",
+  import: "default",
+}) as Record<string, string>;
+
+// Map SVG files by their basename
+const svgByFilename: Record<string, string> = Object.fromEntries(
+  Object.entries(svgFiles)
+    .map(([filePath, content]) => {
+      const match = filePath.match(/\/([^/]+)$/);
+      const filename = match?.[1];
+      if (!filename) return null;
+      return [filename, content] as const;
+    })
+    .filter((entry): entry is readonly [string, string] => Boolean(entry))
+);
+
+// Map image files by their basename
+const imageByFilename: Record<string, string> = Object.fromEntries(
+  Object.entries(imageFiles)
+    .map(([filePath, url]) => {
+      const match = filePath.match(/\/([^/]+)$/);
+      const filename = match?.[1];
+      if (!filename) return null;
+      return [filename, url] as const;
     })
     .filter((entry): entry is readonly [string, string] => Boolean(entry))
 );
@@ -29,48 +44,24 @@ const props = defineProps<{
   title: string;
 }>();
 
-const localSvg = computed(() => {
-  const raw = props.icon?.trim();
-  if (!raw) return null;
-
-  if (!raw.startsWith(LOCAL_SVG_PREFIX)) return null;
-
-  const name = raw.slice(LOCAL_SVG_PREFIX.length).trim();
-  if (!name) return null;
-
-  return localSvgByName[name] ?? null;
+const svgContent = computed(() => {
+  const filename = props.icon?.trim();
+  if (!filename || !filename.endsWith('.svg')) return null;
+  return svgByFilename[filename] ?? null;
 });
 
 const imageUrl = computed(() => {
-  const raw = props.icon?.trim();
-  if (!raw) return null;
-
-  if (!raw.startsWith(IMAGE_PREFIX)) return null;
-
-  const filename = raw.slice(IMAGE_PREFIX.length).trim();
-  if (!filename) return null;
-
-  // 图片统一放在 /.vitepress/theme/assets/img/ 目录下
-  return new URL(`../assets/img/${filename}`, import.meta.url).href;
+  const filename = props.icon?.trim();
+  if (!filename || filename.endsWith('.svg')) return null;
+  return imageByFilename[filename] ?? null;
 });
 
-const iconId = computed(() => {
-  const raw = props.icon?.trim();
-  if (!raw) return null;
-
-  // Prefer Iconify IDs, e.g. "vscode-icons:file-type-vscode".
-  // (Dynamic component names won't work reliably with auto-imported icon components.)
-  if (raw.includes(":") && !raw.startsWith(LOCAL_SVG_PREFIX) && !raw.startsWith(IMAGE_PREFIX)) return raw;
-
-  return null;
-});
 </script>
 
 <template>
   <span class="doc-title">
-    <span v-if="localSvg" class="doc-title__local-icon" v-html="localSvg" aria-hidden="true" />
-    <img v-else-if="imageUrl" :src="imageUrl" alt="" class="doc-title__image" aria-hidden="true" />
-    <Icon v-else-if="iconId" :icon="iconId" aria-hidden="true" />
+    <span v-if="svgContent" class="doc-title__icon" v-html="svgContent" aria-hidden="true" />
+    <img v-else-if="imageUrl" :src="imageUrl" alt="" class="doc-title__icon" aria-hidden="true" />
     <span>{{ title }}</span>
   </span>
 </template>
@@ -82,19 +73,16 @@ const iconId = computed(() => {
   gap: 0.5rem;
 }
 
-.doc-title__local-icon {
+.doc-title__icon {
   display: inline-flex;
   align-items: center;
+  width: 1em;
+  height: 1em;
+  object-fit: contain;
 }
 
 .doc-title :deep(svg) {
   width: 1em;
   height: 1em;
-}
-
-.doc-title__image {
-  width: 1em;
-  height: 1em;
-  object-fit: contain;
 }
 </style>

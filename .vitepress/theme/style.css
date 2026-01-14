@@ -1,0 +1,188 @@
+/* Custom styles for homepage with page layout */
+
+/* Hide site title on homepage only */
+body.hide-nav-title .VPNav .title {
+  display: none !important;
+}
+
+/* Target the VPPage container */
+.VPPage {
+  max-width: 56rem !important;
+  margin: 0 auto !important;
+  padding: 3rem 1.5rem 4rem !important;
+}
+
+/* Homepage hero section - target first h1 */
+.VPPage h1:first-of-type {
+  margin-top: 2rem !important;
+  margin-bottom: 0.5rem !important;
+  font-size: 3.5rem !important;
+  line-height: 1.2 !important;
+  font-weight: 800 !important;
+  letter-spacing: -0.02em !important;
+  background: linear-gradient(120deg, #3451b2 0%, #42b883 100%) !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  background-clip: text !important;
+  position: relative !important;
+}
+
+/* Hide the default header anchor */
+.VPPage h1 .header-anchor {
+  display: none !important;
+}
+
+/* Add decorative line before title */
+.VPPage h1:first-of-type::before {
+  content: '' !important;
+  display: block !important;
+  width: 60px !important;
+  height: 5px !important;
+  background: linear-gradient(90deg, #3451b2 0%, #42b883 100%) !important;
+  margin-bottom: 2rem !important;
+  border-radius: 3px !important;
+  animation: slideIn 0.6s ease-out !important;
+}
+
+/* Style all paragraphs beautifully */
+.VPPage p {
+  font-size: 1.125rem !important;
+  line-height: 1.8 !important;
+  color: var(--vp-c-text-1) !important;
+  margin: 1.5rem 0 !important;
+  max-width: 48rem !important;
+}
+
+/* Style other headings */
+.VPPage h2 {
+  margin-top: 3rem !important;
+  margin-bottom: 1.5rem !important;
+  font-size: 2rem !important;
+  font-weight: 700 !important;
+  color: var(--vp-c-text-1) !important;
+  border-bottom: 2px solid var(--vp-c-divider) !important;
+  padding-bottom: 0.5rem !important;
+}
+
+.VPPage h3 {
+  margin-top: 2rem !important;
+  margin-bottom: 1rem !important;
+  font-size: 1.5rem !important;
+  font-weight: 600 !important;
+  color: var(--vp-c-text-1) !important;
+}
+
+/* Lists styling */
+.VPPage ul, .VPPage ol {
+  margin: 1.5rem 0 !important;
+  padding-left: 2rem !important;
+  max-width: 48rem !important;
+}
+
+.VPPage li {
+  margin: 0.75rem 0 !important;
+  line-height: 1.8 !important;
+  font-size: 1.125rem !important;
+  color: var(--vp-c-text-1) !important;
+}
+
+.VPPage li::marker {
+  color: var(--vp-c-brand-1) !important;
+}
+
+/* Blockquotes */
+.VPPage blockquote {
+  margin: 2rem 0 !important;
+  padding: 1rem 1.5rem !important;
+  border-left: 4px solid var(--vp-c-brand-1) !important;
+  background: var(--vp-c-bg-soft) !important;
+  border-radius: 0 8px 8px 0 !important;
+  font-size: 1.125rem !important;
+  color: var(--vp-c-text-2) !important;
+}
+
+/* Code blocks */
+.VPPage code {
+  font-size: 0.9em !important;
+  padding: 0.2rem 0.4rem !important;
+  background: var(--vp-c-bg-soft) !important;
+  border-radius: 4px !important;
+  color: var(--vp-c-brand-1) !important;
+}
+
+/* Animations */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideIn {
+  from {
+    width: 0;
+    opacity: 0;
+  }
+  to {
+    width: 60px;
+    opacity: 1;
+  }
+}
+
+.VPPage h1:first-of-type {
+  animation: fadeInUp 0.8s ease-out 0.1s both !important;
+}
+
+.VPPage p {
+  animation: fadeInUp 0.8s ease-out 0.3s both !important;
+}
+
+/* Better link styling in page layout */
+.VPPage a:not(.header-anchor) {
+  color: #3451b2 !important;
+  text-decoration: none !important;
+  font-weight: 500 !important;
+  border-bottom: 1px solid transparent !important;
+  transition: all 0.2s ease !important;
+}
+
+.VPPage a:not(.header-anchor):hover {
+  color: #42b883 !important;
+  border-bottom-color: #42b883 !important;
+}
+
+/* Improve spacing between sections */
+.VPPage > div > div > * + * {
+  margin-top: 1.5rem !important;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .VPPage {
+    padding: 2rem 1.25rem 3rem !important;
+  }
+  
+  .VPPage h1:first-of-type {
+    font-size: 2.5rem !important;
+  }
+  
+  .VPPage h1:first-of-type + p {
+    font-size: 1.125rem !important;
+  }
+  
+  .VPPage p, .VPPage li {
+    font-size: 1rem !important;
+  }
+  
+  .VPPage h2 {
+    font-size: 1.75rem !important;
+  }
+  
+  .VPPage h3 {
+    font-size: 1.25rem !important;
+  }
+}

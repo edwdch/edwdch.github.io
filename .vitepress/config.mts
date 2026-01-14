@@ -3,16 +3,17 @@ import lightbox from "vitepress-plugin-lightbox"
 import Icons from 'unplugin-icons/vite'
 import IconsResolver from 'unplugin-icons/resolver'
 import Components from 'unplugin-vue-components/vite'
+import { injectDocTitle } from './theme/plugins/injectDocTitle'
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
-  title: "爱德华笔记",
+  title: "Edward's Blog",
   lang: 'zh-CN',
-  description: "爱德华的学习笔记，通常记录一些开发中遇到的问题和解决方案。",
+  description: "经验之谈",
   cleanUrls: false,
   lastUpdated: true,
   head: [
-    ['link', { rel: 'icon', href: '/favicon.png' }]
+    ['link', { rel: 'icon', href: '/favicon.webp' }]
   ],
   locales: {
     root: {
@@ -44,13 +45,14 @@ export default defineConfig({
       { text: 'macOS', link: '/macos/setup' },
       { text: 'iOS', link: '/ios/surge' },
     ],
-    logo: '/favicon.png',
+    logo: '/favicon.webp',
     sidebar: {
       '/linux': [
         {
           text: 'Linux',
           items: [
-            { text: 'Setup', link: '/linux/setup' },
+            { text: "远程开发解决方案", link: '/linux/dev-in-browser' },
+            { text: 'Linux 服务器起步', link: '/linux/setup' },
             { text: 'Nginx', link: '/linux/nginx' },
             { text: 'VS Code Server', link: '/linux/vscode-server' },
             { text: 'Commands', link: '/linux/commands' },
@@ -126,6 +128,8 @@ export default defineConfig({
     config: (md) => {
       // Use lightbox plugin
       md.use(lightbox, {});
+      // Inject DocTitle component for h1 with frontmatter
+      md.use(injectDocTitle);
     },
   },
   vite: {
