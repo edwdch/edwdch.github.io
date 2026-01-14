@@ -52,16 +52,16 @@ export default defineConfig({
         {
           text: 'Linux',
           items: [
-            { text: "远程开发解决方案", link: '/linux/dev-in-browser' },
-            { text: 'Linux 服务器起步', link: '/linux/setup' },
-            { text: 'Nginx', link: '/linux/nginx' },
-            { text: 'acme.sh', link: '/linux/acme.sh' },
-            { text: 'VS Code Server', link: '/linux/vscode-server' },
+            { text: "远程开发解决方案", link: '/linux/dev-in-browser', icon: 'chrome.webp' },
+            { text: 'Linux 服务器起步', link: '/linux/setup', icon: 'ubuntu.webp' },
+            { text: 'Nginx 部署与配置', link: '/linux/nginx', icon: 'nginx.webp' },
+            { text: 'acme.sh', link: '/linux/acme.sh', icon: 'letsencrypt.png'},
+            { text: 'VS Code Server', link: '/linux/vscode-server', icon: 'vscode.webp' },
             { text: 'Commands', link: '/linux/commands' },
-            { text: 'Guacamole', link: '/linux/guacamole' },
+            { text: 'Guacamole', link: '/linux/guacamole', icon: 'guacamole.webp' },
             { text: 'Gost', link: '/linux/gost' },
             { text: 'Squid', link: '/linux/squid' },
-            { text: 'Authelia', link: '/linux/authelia' },
+            { text: 'Authelia', link: '/linux/authelia', icon: 'authelia.webp' },
           ]
         },
       ],

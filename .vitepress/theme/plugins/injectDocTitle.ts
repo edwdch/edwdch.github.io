@@ -14,6 +14,12 @@ export function injectDocTitle(md: MarkdownIt & MarkdownRenderer) {
     const frontmatter = env?.frontmatter
     
     let prefix = ''
+
+    // Insert DocRefs if refs exist
+    if (frontmatter?.refs && Array.isArray(frontmatter.refs) && frontmatter.refs.length > 0) {
+      const refsBase64 = encodeBase64(JSON.stringify(frontmatter.refs))
+      prefix += `<DocRefs refs-base64="${refsBase64}" />\n`
+    }
     
     // Insert VariablesEditor if variables exist (it will handle all replacements client-side)
     if (frontmatter?.variables && (Array.isArray(frontmatter.variables) ? frontmatter.variables.length > 0 : Object.keys(frontmatter.variables).length > 0)) {

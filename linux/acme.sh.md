@@ -1,5 +1,6 @@
 ---
 title: '使用 acme.sh 获取免费 SSL 证书'
+icon: 'letsencrypt.png'
 variables:
   - key: domain
     label: "主域名"
