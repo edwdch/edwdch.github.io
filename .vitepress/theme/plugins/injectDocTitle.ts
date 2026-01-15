@@ -1,12 +1,11 @@
 import type MarkdownIt from 'markdown-it'
-import type { MarkdownRenderer } from 'vitepress'
 
 // Helper function to encode string to base64 with Unicode support
 function encodeBase64(str: string): string {
   return Buffer.from(str, 'utf-8').toString('base64')
 }
 
-export function injectDocTitle(md: MarkdownIt & MarkdownRenderer) {
+export function injectDocTitle(md: MarkdownIt) {
   const originalRender = md.render.bind(md)
   
   md.render = function (src: string, env?: any): string {

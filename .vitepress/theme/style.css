@@ -1,10 +1,5 @@
 /* Custom styles for homepage with page layout */
 
-/* Hide site title on homepage only */
-body.hide-nav-title .VPNav .title {
-  display: none !important;
-}
-
 /* Target the VPPage container */
 .VPPage {
   max-width: 56rem !important;

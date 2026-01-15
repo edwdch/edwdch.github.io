@@ -76,7 +76,20 @@ const fullPath = computed(() => {
 
 // Get metadata from pages data
 const pageMeta = computed(() => {
-  return pagesMeta.find(page => page.url === fullPath.value)
+  // Try exact match first
+  let found = pagesMeta.find(page => page.url === fullPath.value)
+  
+  // Try with .html suffix (when cleanUrls: false)
+  if (!found) {
+    found = pagesMeta.find(page => page.url === fullPath.value + '.html')
+  }
+  
+  // Try without .html suffix
+  if (!found) {
+    found = pagesMeta.find(page => page.url.replace(/\.html$/, '') === fullPath.value)
+  }
+  
+  return found
 })
 
 const title = computed(() => {

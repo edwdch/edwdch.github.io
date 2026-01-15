@@ -32,7 +32,7 @@ onMounted(() => {
 });
 
 // Subscribe to route changes to re-apply medium zoom effect and toggle nav title
-router.onAfterRouteChanged = () => {
+router.onAfterRouteChange = () => {
   setupMediumZoom();
   toggleNavTitle();
 };

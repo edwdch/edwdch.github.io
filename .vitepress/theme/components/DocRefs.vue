@@ -98,8 +98,14 @@ const refItems = computed((): RefItem[] => {
     // Remove .md extension if present
     targetPath = targetPath.replace(/\.md$/, '')
 
-    // Find metadata from pages data
-    const pageMeta = pagesMeta.find(page => page.url === targetPath)
+    // Find metadata from pages data (handle both with and without .html suffix)
+    let pageMeta = pagesMeta.find(page => page.url === targetPath)
+    if (!pageMeta) {
+      pageMeta = pagesMeta.find(page => page.url === targetPath + '.html')
+    }
+    if (!pageMeta) {
+      pageMeta = pagesMeta.find(page => page.url.replace(/\.html$/, '') === targetPath)
+    }
     
     let title = pageMeta?.title || ''
     let icon = pageMeta?.icon || ''
