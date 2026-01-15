@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import { useData, useRoute, withBase } from 'vitepress'
+import { useRoute, withBase } from 'vitepress'
 import { BookOpen } from 'lucide-vue-next'
+import { data as pagesMeta } from '../data/pagesMeta.data'
 
 // Load SVG files as raw content for inline rendering
 const svgFiles = import.meta.glob('../assets/icons/*.svg', {
@@ -48,7 +49,6 @@ interface Props {
 
 const props = defineProps<Props>()
 const route = useRoute()
-const { theme } = useData()
 
 // Helper function to decode base64 with Unicode support
 const decodeBase64 = (str: string): string => {
@@ -77,7 +77,6 @@ interface RefItem {
 const refItems = computed((): RefItem[] => {
   const currentPath = route.path
   const currentDir = currentPath.substring(0, currentPath.lastIndexOf('/'))
-  const sidebar = theme.value.sidebar
 
   return refs.value.map(ref => {
     let targetPath = ref
@@ -99,28 +98,11 @@ const refItems = computed((): RefItem[] => {
     // Remove .md extension if present
     targetPath = targetPath.replace(/\.md$/, '')
 
-    // Find title and icon from sidebar
-    let title = ''
-    let icon = ''
-
-    if (sidebar) {
-      for (const key in sidebar) {
-        const items = sidebar[key]
-        if (Array.isArray(items)) {
-          for (const group of items) {
-            if (group.items) {
-              for (const item of group.items) {
-                if (item.link === targetPath) {
-                  title = item.text || ''
-                  icon = item.icon || ''
-                  break
-                }
-              }
-            }
-          }
-        }
-      }
-    }
+    // Find metadata from pages data
+    const pageMeta = pagesMeta.find(page => page.url === targetPath)
+    
+    let title = pageMeta?.title || ''
+    let icon = pageMeta?.icon || ''
 
     // Fallback title from path
     if (!title) {
@@ -145,9 +127,9 @@ const getIconSvg = (icon: string): string | null => {
   return svgByFilename[icon] ?? null
 }
 
-const getIconUrl = (icon: string): string | null => {
-  if (!icon || icon.endsWith('.svg')) return null
-  return imageByFilename[icon] ?? null
+const getIconUrl = (icon: string): string | undefined => {
+  if (!icon || icon.endsWith('.svg')) return undefined
+  return imageByFilename[icon] ?? undefined
 }
 </script>
 

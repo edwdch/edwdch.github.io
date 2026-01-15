@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import { useData, useRoute, withBase } from 'vitepress'
+import { useRoute, withBase } from 'vitepress'
+import { data as pagesMeta } from '../data/pagesMeta.data'
 
 // Load SVG files as raw content for inline rendering
 const svgFiles = import.meta.glob('../assets/icons/*.svg', {
@@ -46,7 +47,6 @@ interface Props {
 
 const props = defineProps<Props>()
 const route = useRoute()
-const { theme } = useData()
 
 // Resolve the full path
 const fullPath = computed(() => {
@@ -74,34 +74,14 @@ const fullPath = computed(() => {
   return targetPath
 })
 
-// Get the title and icon from sidebar configuration
-const sidebarItem = computed(() => {
-  const sidebar = theme.value.sidebar
-
-  if (sidebar) {
-    // Search through all sidebar items
-    for (const key in sidebar) {
-      const items = sidebar[key]
-      if (Array.isArray(items)) {
-        for (const group of items) {
-          if (group.items) {
-            for (const item of group.items) {
-              if (item.link === fullPath.value) {
-                return { text: item.text, icon: item.icon || '' }
-              }
-            }
-          }
-        }
-      }
-    }
-  }
-
-  return null
+// Get metadata from pages data
+const pageMeta = computed(() => {
+  return pagesMeta.find(page => page.url === fullPath.value)
 })
 
 const title = computed(() => {
-  if (sidebarItem.value?.text) {
-    return sidebarItem.value.text
+  if (pageMeta.value?.title) {
+    return pageMeta.value.title
   }
   // Fallback to filename
   const fileName = props.href.split('/').pop()?.replace(/\.md$/, '') || props.href
@@ -111,7 +91,7 @@ const title = computed(() => {
     .join(' ')
 })
 
-const icon = computed(() => sidebarItem.value?.icon || '')
+const icon = computed(() => pageMeta.value?.icon || '')
 
 const url = computed(() => withBase(fullPath.value))
 
@@ -121,9 +101,9 @@ const getIconSvg = (iconName: string): string | null => {
   return svgByFilename[iconName] ?? null
 }
 
-const getIconUrl = (iconName: string): string | null => {
-  if (!iconName || iconName.endsWith('.svg')) return null
-  return imageByFilename[iconName] ?? null
+const getIconUrl = (iconName: string): string | undefined => {
+  if (!iconName || iconName.endsWith('.svg')) return undefined
+  return imageByFilename[iconName] ?? undefined
 }
 </script>
 
