@@ -57,7 +57,6 @@ export default defineConfig({
             { text: 'Nginx 部署与配置', link: '/linux/nginx', icon: 'nginx.webp' },
             { text: 'acme.sh', link: '/linux/acme.sh', icon: 'letsencrypt.png'},
             { text: 'VS Code Server', link: '/linux/vscode-server', icon: 'vscode.webp' },
-            { text: 'Commands', link: '/linux/commands' },
             { text: 'Guacamole', link: '/linux/guacamole', icon: 'guacamole.webp' },
             { text: 'Gost', link: '/linux/gost' },
             { text: 'Squid', link: '/linux/squid' },
