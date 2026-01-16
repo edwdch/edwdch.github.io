@@ -59,8 +59,6 @@ export default defineConfig({
             { text: 'VS Code Server', link: '/linux/vscode-server' },
             { text: 'Guacamole', link: '/linux/guacamole' },
             { text: 'Gost', link: '/linux/gost' },
-            { text: 'Squid', link: '/linux/squid' },
-            { text: 'Authelia', link: '/linux/authelia' },
           ]
         },
       ],
@@ -71,15 +69,6 @@ export default defineConfig({
             { text: '小鹤双拼', link: '/windows/xiaohe' },
             { text: '开发环境', link: '/windows/development' },
             { text: 'Virtual Box', link: '/windows/virtualbox' },
-          ]
-        },
-      ],
-      '/macos': [
-        {
-          text: 'macOS',
-          items: [
-            { text: 'Setup', link: '/macos/setup' },
-            { text: 'Docker', link: '/macos/docker' },
           ]
         },
       ],

@@ -25,6 +25,7 @@ variables:
 
 ```bash 
 curl https://get.acme.sh | sh -s email=$[email]
+source ~/.bashrc
 ```
 
 ## 申请证书
