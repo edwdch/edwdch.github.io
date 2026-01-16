@@ -1,0 +1,25 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "plugins": ["import", "typescript", "unicorn"],
+  "env": {
+    "browser": true,
+    "es2024": true,
+    "node": true
+  },
+  "categories": {
+    "correctness": "error",
+    "suspicious": "warn"
+  },
+  "rules": {
+    "no-console": "off",
+    "no-unused-vars": "warn",
+    "eqeqeq": "warn",
+    "import/no-unassigned-import": "off"
+  },
+  "ignorePatterns": [
+    "node_modules",
+    "dist",
+    ".vitepress/cache",
+    ".vitepress/dist"
+  ]
+}

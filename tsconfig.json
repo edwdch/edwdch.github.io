@@ -21,5 +21,10 @@
     "noFallthroughCasesInSwitch": true,
     "types": ["vite/client"]
   },
-  "include": [".vitepress/**/*.ts", ".vitepress/**/*.d.ts", ".vitepress/**/*.tsx", ".vitepress/**/*.vue"]
+  "include": [
+    ".vitepress/**/*.ts",
+    ".vitepress/**/*.d.ts",
+    ".vitepress/**/*.tsx",
+    ".vitepress/**/*.vue"
+  ]
 }

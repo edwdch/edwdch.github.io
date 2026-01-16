@@ -10,6 +10,9 @@
     "lodash-es": "^4.17.22",
     "lucide-vue-next": "^0.562.0",
     "medium-zoom": "^1.1.0",
+    "oxc-transform": "^0.108.0",
+    "oxfmt": "^0.24.0",
+    "oxlint": "^1.39.0",
     "taze": "^19.9.2",
     "unocss": "^66.6.0",
     "unplugin-icons": "^23.0.1",
@@ -23,6 +26,8 @@
     "dev": "vitepress dev --host",
     "docs:build": "vitepress build",
     "docs:preview": "vitepress preview",
+    "lint": "oxlint",
+    "lint:fix": "oxlint --fix",
     "up": "taze -I"
   }
 }
