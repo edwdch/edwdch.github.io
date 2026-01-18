@@ -24,15 +24,86 @@ sudo apt install nginx
 
 | 目录 | 用途 |
 |------|------|
-| `/etc/nginx/conf.d/` | 存放 Nginx 站点配置文件，每个站点一个 `.conf` 文件 |
-| `/etc/nginx/ssl/` | 存放 SSL 证书文件 |
-| `/etc/nginx/snippets/` | 存放 Nginx 配置片段，方便复用 |
+| `/data/nginx/conf.d/` | 存放 Nginx 站点配置文件，每个站点一个 `.conf` 文件 |
+| `/data/nginx/snippets/` | 存放 Nginx 配置片段，方便复用 |
 
-现在我们来调整一下目录设置，检查 `/etc/nginx/nginx.conf` 文件，找到 `include /etc/nginx/sites-enabled/*;` 这一行，在前面加上 `#` 注释掉它：
+现在我们来调整一下 Nginx 的默认配置，使其符合我们的目录规划。高亮行表示我们做了修改。
 
-```nginx
-# include /etc/nginx/sites-enabled/*;
+::: code-group
+
+```nginx{7-8,59-60,62-68} [/etc/nginx/nginx.conf]
+user www-data;
+worker_processes auto;
+pid /run/nginx.pid;
+include /etc/nginx/modules-enabled/*.conf;
+
+events {
+	worker_connections 4096;
+	multi_accept on;
+}
+
+http {
+
+	##
+	# Basic Settings
+	##
+
+	sendfile on;
+	tcp_nopush on;
+	types_hash_max_size 2048;
+	# server_tokens off;
+
+	# server_names_hash_bucket_size 64;
+	# server_name_in_redirect off;
+
+	include /etc/nginx/mime.types;
+	default_type application/octet-stream;
+
+	##
+	# SSL Settings
+	##
+
+	ssl_protocols TLSv1 TLSv1.1 TLSv1.2 TLSv1.3; # Dropping SSLv3, ref: POODLE
+	ssl_prefer_server_ciphers on;
+
+	##
+	# Logging Settings
+	##
+
+	access_log /var/log/nginx/access.log;
+	error_log /var/log/nginx/error.log;
+
+	##
+	# Gzip Settings
+	##
+
+	gzip on;
+
+	# gzip_vary on;
+	# gzip_proxied any;
+	# gzip_comp_level 6;
+	# gzip_buffers 16 8k;
+	# gzip_http_version 1.1;
+	# gzip_types text/plain text/css application/json application/javascript text/xml application/xml application/xml+rss text/javascript;
+
+	##
+	# Virtual Host Configs
+	##
+
+	include /data/nginx/conf.d/*.conf;
+	# include /etc/nginx/sites-enabled/*;
+
+	server {
+		listen 80 default_server;
+		listen [::]:80 default_server;
+		server_name _;
+			
+		return 302 https://$host$request_uri;
+	}
+}
 ```
+
+:::
 
 接下来验证并重启 Nginx：
 
@@ -43,10 +114,6 @@ sudo systemctl restart nginx
 
 注意，这个重启操作每次都必须按顺序来执行，先用 `nginx -t` 检查配置文件是否正确，如果有错误，Nginx 会给出提示并拒绝重启，避免因为配置错误导致服务不可用。
 
-## 申请 HTTPS 证书
-
-使用 [acme.sh](./acme.sh) 来申请免费的 Let's Encrypt 证书。
-
 ## 片段配置
 
 我们有很多服务的配置片段是重复的，我们可以新建一些通用的配置片段，方便后续引用。
@@ -55,9 +122,9 @@ sudo systemctl restart nginx
 
 ::: code-group
 
-```nginx [/etc/nginx/snippets/$[domain]-ssl.conf]
-ssl_certificate /etc/nginx/ssl/$[domain].fullchain.pem;
-ssl_certificate_key /etc/nginx/ssl/$[domain].key.pem;
+```nginx [/data/nginx/snippets/ssl-$[domain].conf]
+ssl_certificate /data/nginx/ssl/$[domain].fullchain.pem;
+ssl_certificate_key /data/nginx/ssl/$[domain].key.pem;
 ```
 
 :::
@@ -66,7 +133,7 @@ ssl_certificate_key /etc/nginx/ssl/$[domain].key.pem;
 
 ::: code-group
 
-```nginx [/etc/nginx/snippets/websocket.conf]
+```nginx [/data/nginx/snippets/websocket.conf]
 proxy_http_version 1.1;
 proxy_set_header Upgrade $http_upgrade;
 proxy_set_header Connection "upgrade";
@@ -84,7 +151,7 @@ tcp_nodelay on;
 
 ::: code-group
 
-```nginx [/etc/nginx/snippets/proxy-headers.conf]
+```nginx [/data/nginx/snippets/proxy-headers.conf]
 proxy_set_header Host $host;
 proxy_set_header X-Real-IP $remote_addr;
 proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;

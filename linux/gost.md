@@ -128,12 +128,18 @@ RestrictRealtime=true
 WantedBy=multi-user.target
 ```
 
-启动服务。
+启动服务：
 
 ```bash
 sudo systemctl daemon-reload
 sudo systemctl enable gost
 sudo systemctl start gost
+```
+
+查看日志：
+
+```bash
+sudo journalctl -u gost.service -fc
 ```
 
 ## 配置客户端
