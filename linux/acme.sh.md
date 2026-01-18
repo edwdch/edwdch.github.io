@@ -43,14 +43,82 @@ export CF_Email="$[cf_email]"
 acme.sh --issue --dns dns_cf -d "*.$[domain]"
 ```
 
+## 权限设置
+
+我们计划将证书安装到 `/data/ssl/` 目录下，因此需要确保运行相关服务的用户对该目录有读取权限。
+
+大多数 Linux 发行版自带一个 `ssl-cert` 组，可以将需要访问证书的服务用户添加到该组中。
+
+如果没有这个组，自己建一个：
+
+```bash
+# 检查组是否存在
+grep ssl-cert /etc/group
+
+# 如果没有，创建它
+sudo groupadd ssl-cert
+```
+
+将证书目录的所属组改为 `ssl-cert`，并设置合适的权限：
+
+```bash
+sudo chgrp -R ssl-cert /data/ssl
+sudo chmod -R g+rX /data/ssl
+```
+
+::: info
+`g+r`: 赋予群组（Group）读取权限。
+
+`X`: 这是一个“智能”权限位。它会给目录加上执行权限（以便能够 cd 进入），但不会给普通的文本文件增加执行权限，这样更安全。
+:::
+
 ## 安装证书
 
-以下命令将证书安装到 `/data/nginx/ssl/` 目录，并在证书更新后重启 Nginx 服务。
+新建一个脚本文件 `/data/app/acme.sh/reloadcmd.sh`，用于在证书更新后重载相关服务。
+
+```bash
+touch /data/app/acme.sh/reloadcmd.sh
+chmod +x /data/app/acme.sh/reloadcmd.sh
+```
+
+脚本内容可以填入你需要重载的服务命令，例如重载 Nginx：
+
+```bash
+#!/bin/bash
+
+# 重新执行权限设置
+sudo chgrp -R ssl-cert /data/ssl
+sudo chmod -R g+rX /data/ssl
+
+# 测试并重载 Nginx 配置
+sudo nginx -t
+sudo nginx -s reload
+```
+
+以下命令将证书安装到 `/data/ssl/` 目录，并在证书更新后执行 `/data/app/acme.sh/reloadcmd.sh` 脚本来重载相关服务。
 
 ```bash
 acme.sh --install-cert -d '*.$[domain]' \
-  --cert-file      /data/nginx/ssl/$[domain].cert.pem \
-  --key-file       /data/nginx/ssl/$[domain].key.pem \
-  --fullchain-file /data/nginx/ssl/$[domain].fullchain.pem \
-  --reloadcmd     "sudo systemctl restart nginx"
+  --cert-file      /data/ssl/$[domain].cert.pem \
+  --key-file       /data/ssl/$[domain].key.pem \
+  --fullchain-file /data/ssl/$[domain].fullchain.pem \
+  --reloadcmd     "/data/app/acme.sh/reloadcmd.sh"
+```
+
+注意，这个命令还会启动自动更新证书的定时任务。证书过期前会自动更新。
+
+
+
+## 证书管理
+
+列出已申请的证书：
+
+```bash
+acme.sh --list
+```
+
+移除某个域名的证书，参数为 `--list` 列出的 `Main_Domain` 字段，如：
+
+```bash
+acme.sh --remove -d "*.$[domain]"
 ```
