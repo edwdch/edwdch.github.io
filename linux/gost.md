@@ -28,14 +28,17 @@ variables:
 下载 `Gost` 的二进制文件，并移动到 `/usr/local/bin` 目录。
 
 ```bash
+export GOST_VERSION="3.2.6"
 cd /tmp
-wget https://github.com/go-gost/gost/releases/download/v3.2.6/gost_3.2.6_linux_amd64.tar.gz
-tar -zxvf ./gost_3.2.6_linux_amd64.tar.gz
+wget https://github.com/go-gost/gost/releases/download/v${GOST_VERSION}/gost_${GOST_VERSION}_linux_amd64.tar.gz
+tar -zxvf ./gost_${GOST_VERSION}_linux_amd64.tar.gz
 mv ./gost /usr/local/bin/gost
 chmod +x /usr/local/bin/gost
 ```
 
 我们下载安装的是 `v3.2.6` 版本，你可以根据需要下载最新版本，下载地址在 [Releases 页面](https://github.com/go-gost/gost/releases)。
+
+升级时，仅需要修改 `GOST_VERSION` 变量，然后重新执行上述命令即可。
 
 ## 配置文件
 
@@ -58,8 +61,8 @@ services:
     listener:
       type: http2
       tls:
-        certFile: /data/nginx/ssl/$[domain].fullchain.pem
-        keyFile: /data/nginx/ssl/$[domain].key.pem
+        certFile: /data/ssl/$[domain].fullchain.pem
+        keyFile: /data/ssl/$[domain].key.pem
       metadata:
         knock: www.google.com
         probeResist: code:404
@@ -70,18 +73,22 @@ services:
 
 :::
 
-这份配置文件定义了一个 HTTPS 代理服务，监听在 `7443` 端口，使用 HTTP/2 协议，并启用了用户名和密码认证。启用了探测防御功能，收到探测请求时返回 `404` 状态码，仅当访问主机名为 `www.google.com` 时才响应请求。
+这份配置文件定义了一个 HTTPS 代理服务，监听在 `7443` 端口，使用 HTTP/2 协议，并启用了用户名和密码认证。
 
+::: tip
+注意，这份配置还启用了探测防御功能，收到探测请求时返回 `404` 状态码，仅当访问主机名为 `www.google.com` 时才响应请求。当你在 `Switch Omega` 插件中使用时，需要先访问一次 `www.google.com`，然后再使用代理访问其他网站。
+:::
 ## 权限约束
 
 Gost 作为一个向外部开放的代理服务，一旦被攻破，可能会被用来进行恶意活动。因此，我们需要对 Gost 进程进行权限约束，限制其访问权限。
 
-创建一个专用用户 `gost` 来运行 Gost 服务，并配置数据目录的权限。
+创建一个专用用户 `gost` 来运行 Gost 服务，配置数据目录的权限，并加入 `ssl-cert` 组以访问 SSL 证书。
 
 ```bash
 sudo useradd -rs /bin/false gost
 sudo chown -R gost:gost /data/app/gost
 sudo chmod 700 /data/app/gost
+sudo usermod -aG ssl-cert gost
 ```
 
 ## 配置服务
@@ -131,20 +138,15 @@ sudo systemctl start gost
 
 ## 配置客户端
 
-在客户端配置代理，使用 `https://username:password@example.com:443` 作为代理地址。
+在客户端配置代理，使用 `https://username:password@example.com:7443` 作为代理地址。
 
 ## 定时重启
 
-SSL 证书更新时，需要重启 `Gost` 服务来加载新的证书。我们可以通过定时任务来实现自动重启。
+修改 `/data/app/acme.sh/reloadcmd.sh` 脚本，**添加**重启 `Gost` 服务的命令。
 
 ```bash
-sudo crontab -e
-``` 
-
-添加以下内容，每周六早上 8 点重启一次 `Gost` 服务。
-
-```cron
-0 8 * * 6 /usr/bin/systemctl restart gost >> /var/log/gost-restart.log 2>&1
+# 重启 Gost 服务
+sudo systemctl restart gost
 ```
 
 ## 卸载
