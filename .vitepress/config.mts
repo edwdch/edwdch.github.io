@@ -37,44 +37,12 @@ export default defineConfig({
     // https://vitepress.dev/reference/default-theme-config
     nav: [
       { text: "主页", link: "/" },
-      { text: "Linux", link: "/linux/setup" },
-      { text: "Windows", link: "/windows/xiaohe" },
-      { text: "macOS", link: "/macos/setup" },
-      { text: "iOS", link: "/ios/surge" },
+      { text: "Linux", link: "/linux/" },
+      { text: "Windows", link: "/windows/" },
+      { text: "macOS", link: "/macos/" },
+      { text: "iOS", link: "/ios/" },
     ],
     logo: "/favicon.webp",
-    sidebar: {
-      "/linux": [
-        {
-          text: "Linux",
-          items: [
-            { text: "远程开发解决方案", link: "/linux/dev-in-browser" },
-            { text: "Linux 服务器起步", link: "/linux/setup" },
-            { text: "Nginx 部署与配置", link: "/linux/nginx" },
-            { text: "acme.sh", link: "/linux/acme.sh" },
-            { text: "VS Code Server", link: "/linux/vscode-server" },
-            { text: "Guacamole", link: "/linux/guacamole" },
-            { text: "Gost", link: "/linux/gost" },
-          ],
-        },
-      ],
-      "/windows": [
-        {
-          text: "Windows",
-          items: [
-            { text: "小鹤双拼", link: "/windows/xiaohe" },
-            { text: "开发环境", link: "/windows/development" },
-            { text: "Virtual Box", link: "/windows/virtualbox" },
-          ],
-        },
-      ],
-      "/ios": [
-        {
-          text: "iOS",
-          items: [{ text: "Surge", link: "/ios/surge" }],
-        },
-      ],
-    },
     socialLinks: [{ icon: "github", link: "https://github.com/edwdch/edwdch.github.io" }],
     search: {
       provider: "local",
@@ -100,10 +68,10 @@ export default defineConfig({
         },
       },
     },
-    footer: {
-      message: "Released under the MIT License.",
-      copyright: "Copyright © 2024-present Edward Chen",
-    },
+    // footer: {
+    //   message: "Released under the MIT License.",
+    //   copyright: "Copyright © 2024-present Edward Chen",
+    // },
   },
   markdown: {
     config: (md) => {
