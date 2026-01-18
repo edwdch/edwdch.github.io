@@ -7,16 +7,7 @@ settings:
 importers:
 
   .:
-    devDependencies:
-      '@types/lodash-es':
-        specifier: ^4.17.12
-        version: 4.17.12
-      '@types/markdown-it':
-        specifier: ^14.1.2
-        version: 14.1.2
-      '@types/node':
-        specifier: ^25.0.8
-        version: 25.0.8
+    dependencies:
       '@unocss/reset':
         specifier: ^66.6.0
         version: 66.6.0
@@ -56,6 +47,16 @@ importers:
       vue:
         specifier: ^3.5.26
         version: 3.5.26
+    devDependencies:
+      '@types/lodash-es':
+        specifier: ^4.17.12
+        version: 4.17.12
+      '@types/markdown-it':
+        specifier: ^14.1.2
+        version: 14.1.2
+      '@types/node':
+        specifier: ^25.0.8
+        version: 25.0.8
 
 packages:
 
