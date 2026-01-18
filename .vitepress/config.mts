@@ -38,8 +38,6 @@ export default defineConfig({
     nav: [
       { text: "主页", link: "/" },
       { text: "Linux", link: "/linux/" },
-      { text: "Windows", link: "/windows/" },
-      { text: "macOS", link: "/macos/" },
       { text: "iOS", link: "/ios/" },
     ],
     logo: "/favicon.webp",

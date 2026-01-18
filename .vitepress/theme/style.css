@@ -181,3 +181,10 @@
     font-size: 1.25rem !important;
   }
 }
+
+/* Fix search button background */
+.VPNavBarSearch .DocSearch-Button,
+.VPNavBarSearch button.DocSearch-Button,
+#local-search button {
+  background-color: var(--vp-c-bg-alt) !important;
+}
