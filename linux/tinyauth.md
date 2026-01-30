@@ -36,6 +36,7 @@ docker run -i -t --rm ghcr.io/steveiliop56/tinyauth:v4 user create --docker --us
 services:
   tinyauth:
     image: ghcr.io/steveiliop56/tinyauth:v4
+    restart: always
     container_name: tinyauth
     environment:
       - APP_URL=https://auth.$[domain]
@@ -101,7 +102,7 @@ location = /auth-validate {
 
 error_page 401 = @error401;
 location @error401 {
-    return 302 https://auth.$[domain]/login?redirect_uri=$scheme://$http_host$request_uri;;
+    return 302 https://auth.$[domain]/login?redirect_uri=$scheme://$http_host$request_uri;
 }
 ```
 :::

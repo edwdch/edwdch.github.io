@@ -82,8 +82,8 @@ server {
     listen 443 ssl;
     server_name code.$[domain];
 
-    include /data/nginx/snippets/$[domain]-ssl.conf;
-    include /data/nginx/snippets/authelia.conf;
+    include /data/nginx/snippets/ssl-$[domain].conf;
+    include /data/nginx/snippets/auth.conf;
 
     location / {
         proxy_pass http://localhost:8886;

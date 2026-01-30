@@ -27,6 +27,11 @@ sudo apt install nginx
 | `/data/nginx/conf.d/` | 存放 Nginx 站点配置文件，每个站点一个 `.conf` 文件 |
 | `/data/nginx/snippets/` | 存放 Nginx 配置片段，方便复用 |
 
+```bash
+mkdir -p /data/nginx/conf.d
+mkdir -p /data/nginx/snippets
+```
+
 现在我们来调整一下 Nginx 的默认配置，使其符合我们的目录规划。高亮行表示我们做了修改。
 
 ::: code-group
@@ -109,7 +114,7 @@ http {
 
 ```bash
 sudo nginx -t
-sudo systemctl restart nginx
+sudo nginx -s reload
 ```
 
 注意，这个重启操作每次都必须按顺序来执行，先用 `nginx -t` 检查配置文件是否正确，如果有错误，Nginx 会给出提示并拒绝重启，避免因为配置错误导致服务不可用。
@@ -123,8 +128,8 @@ sudo systemctl restart nginx
 ::: code-group
 
 ```nginx [/data/nginx/snippets/ssl-$[domain].conf]
-ssl_certificate /data/nginx/ssl/$[domain].fullchain.pem;
-ssl_certificate_key /data/nginx/ssl/$[domain].key.pem;
+ssl_certificate /data/ssl/$[domain].fullchain.pem;
+ssl_certificate_key /data/ssl/$[domain].key.pem;
 ```
 
 :::
