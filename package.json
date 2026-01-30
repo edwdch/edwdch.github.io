@@ -1,7 +1,7 @@
 {
   "scripts": {
     "dev": "vitepress dev --host",
-    "docs:build": "git fetch --unshallow && vitepress build",
+    "docs:build": "vitepress build",
     "docs:preview": "vitepress preview",
     "lint": "oxlint",
     "lint:fix": "oxlint --fix",
