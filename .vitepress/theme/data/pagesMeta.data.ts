@@ -33,7 +33,18 @@ export default createContentLoader('**/*.md', {
       let url = page.url.replace(/\.html$/, '')
       
       // Get last modified time from git
-      const relativePath = url === '/' ? 'index.md' : `${url.slice(1)}.md`
+      // Handle different URL patterns:
+      // - "/" -> "index.md"
+      // - "/linux/" -> "linux/index.md"
+      // - "/linux/setup" -> "linux/setup.md"
+      let relativePath: string
+      if (url === '/') {
+        relativePath = 'index.md'
+      } else if (url.endsWith('/')) {
+        relativePath = `${url.slice(1)}index.md`
+      } else {
+        relativePath = `${url.slice(1)}.md`
+      }
       const lastUpdated = getGitLastModified(relativePath)
       
       return {
