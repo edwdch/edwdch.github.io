@@ -38,7 +38,7 @@ export default defineConfig({
     nav: [
       { text: "主页", link: "/" },
       { text: "Linux", link: "/linux/" },
-      { text: "iOS", link: "/ios/" },
+      { text: "Apple", link: "/apple/" },
     ],
     logo: "/favicon.webp",
     socialLinks: [{ icon: "github", link: "https://github.com/edwdch/edwdch.github.io" }],

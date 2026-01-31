@@ -27,7 +27,7 @@ variables:
 
 ### 外网访问
 
-如果你有公网 IP，阅读 <PostLink href="./gost" /> 来配置 HTTPS 代理，这样你在外网就可以通过 `ZeroOmega` 插件配置代理来访问你的内网开发环境。
+如果你有公网 IP，阅读 <PostLink href="./gost" /> 来配置 HTTPS 代理，这样你在外网就可以通过 [ZeroOmega](https://github.com/zero-peak/ZeroOmega) 插件配置代理来访问你的内网开发环境。
 
 ## DNS 配置
 
@@ -38,8 +38,8 @@ variables:
 | 服务       | 子域名                     | 类型 | 指向       |
 | ---------- | -------------------------- | ---- | ----------- |
 | Linux | dev.$[domain]       | A    | 内网 IP |
-| Gost | gost.$[domain]      | A | 公网 IP |
+| Gost | proxy.$[domain]      | A | 公网 IP |
 | VS Code    | code.$[domain]     | CNAME| dev.$[domain] |
 | Apache Guacamole | rdp.$[domain]      | CNAME| dev.$[domain] |
-| Authelia  | auth.$[domain]     | CNAME| dev.$[domain] |
+| Tinyauth  | auth.$[domain]     | CNAME| dev.$[domain] |
 | TTYD       | console.$[domain]  | CNAME| dev.$[domain] |

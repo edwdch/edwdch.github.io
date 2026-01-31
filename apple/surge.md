@@ -1,4 +1,7 @@
-# <DocTitle icon="img:surge.webp" title="Surge" />
+---
+title: Surge
+icon: 'surge.webp'
+---
 
 [Surge](https://apps.apple.com/us/app/surge-5/id1442620678) 是我目前为止购买过最贵的 iOS 代理软件了。
 
