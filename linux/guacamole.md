@@ -1,4 +1,14 @@
-# <DocTitle icon="vscode-icons:file-type-apache" title="Apache Guacamole" />
+---
+title: "Apache Guacamole"
+icon: "guacamole.webp"
+variables:
+  - key: domain
+    default: example.com
+    label: "主域名"
+refs:
+  - nginx
+  - tinyauth
+---
 
 Apache Guacamole 是一个 HTML5 远程桌面网关，支持 VNC、RDP 和 SSH 协议。它可以让你通过浏览器访问远程服务器，而不需要安装客户端。
 
@@ -121,16 +131,13 @@ docker-compose up -d
 - 反向代理的端口为 11000（代码高亮行），需要与前面的 `docker-compose.yml` 文件中的端口映射一致。
 
 
-```nginx{16}
+```nginx{13}
 server {
     listen 443 ssl;
-    server_name rdp.example.com;
+    server_name rdp.$[domain];
 
-    ssl_certificate /etc/nginx/ssl/rdp.example.com.fullchain.pem;
-    ssl_certificate_key /etc/nginx/ssl/rdp.example.com.key.pem;
-
-    ssl_protocols TLSv1.2 TLSv1.3;
-    ssl_ciphers 'TLS_AES_128_GCM_SHA256:TLS_AES_256_GCM_SHA384:TLS_CHACHA20_POLY1305_SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-RSA-AES256-GCM-SHA384';
+    include /data/nginx/snippets/ssl-$[domain].conf;
+    include /data/nginx/snippets/auth.conf;
 
     location = / {
         return 301 /guacamole;
@@ -139,21 +146,8 @@ server {
     location /guacamole {
         proxy_pass http://localhost:11000;
 
-        proxy_set_header Host $host;
-        proxy_set_header X-Real-IP $remote_addr;
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_set_header X-Forwarded-Proto $scheme;
-        proxy_set_header X-Forwarded-Host $host:$server_port;
-
-        # WebSocket
-        proxy_http_version 1.1;
-        proxy_set_header Upgrade $http_upgrade;
-        proxy_set_header Connection "upgrade";
-        proxy_buffering off;
-        tcp_nodelay on;
-        proxy_connect_timeout 60s;
-        proxy_send_timeout 3600s;
-        proxy_read_timeout 3600s;
+        include /data/nginx/snippets/proxy-headers.conf;
+        include /data/nginx/snippets/websocket.conf;
     }
 }
 ```

@@ -15,7 +15,7 @@ variables:
 
 1. 阅读 <PostLink href="./setup" /> 来完成基础环境的搭建。
 2. 阅读 <PostLink href="./nginx" /> 和 <PostLink href="./acme.sh" /> 来配置好 Nginx 和 SSL 证书。
-3. 阅读 <PostLink href="./authelia" /> 来配置好内网统一认证方案，保护你的开发环境不被未授权访问。
+3. 阅读 <PostLink href="./tinyauth" /> 来配置好内网统一认证方案，保护你的开发环境不被未授权访问。
 4. 阅读 <PostLink href="./vscode-server" /> 配置好网页版本的 VS Code，你便可以通过浏览器来访问服务器，方便后面的配置。
 5. 阅读 <PostLink href="./ttyd" /> 来配置好通过网页访问终端，防止 VS Code 无法访问时，紧急情况下还能通过网页终端进行维护。
 
