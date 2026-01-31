@@ -5,6 +5,8 @@ siteTitle: false
 
 # Edward's Blog
 
-出于自己的需求，我总结了一篇 <PostLink href="./linux/dev-in-browser" />，从头开始配置，如果你也有类似需求，可以参考这篇文章作为导读，分别介绍了各个组件的配置方式。
+你好！欢迎来到我的技术博客 👋
 
-我同时也在使用 Apple 的设备，所以也写了一些 macOS 和 iOS 相关的文章，可以参考 Apple 系列文章。
+这里主要记录我在折腾各种技术时的心得和踩坑经历，希望能帮助到有类似需求的你。
+
+我的核心项目是搭建一套**基于浏览器的远程开发环境**——只需一个 Chrome 浏览器，就能随时随地访问完整的开发工具链。 <PostLink href="./linux/dev-in-browser" /> 是一篇导读文章，涵盖了 Nginx、SSL 证书、统一认证、VS Code Server、Web 终端、Windows 远程桌面等配置，适合想要从零开始搭建的朋友。
