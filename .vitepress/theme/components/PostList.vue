@@ -233,7 +233,8 @@ const getIconUrl = (iconName: string): string | undefined => {
 }
 
 .post-link:hover {
-  padding-left: 0.5rem;
+  transform: scale(1.02);
+  transform-origin: left center;
 }
 
 .post-link:hover .post-title {
