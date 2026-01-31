@@ -226,19 +226,52 @@ const getIconUrl = (iconName: string): string | undefined => {
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  padding: 0.625rem 0;
+  padding: 0.625rem 1rem;
+  margin: 0 -1rem;
   text-decoration: none !important;
-  border-bottom: 1px dashed var(--vp-c-divider);
-  transition: all 0.2s ease;
+  border-radius: 8px;
+  border-bottom: 1px dashed transparent;
+  position: relative;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  background: transparent;
+}
+
+.post-link::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 1px;
+  background: var(--vp-c-divider);
+  background-image: linear-gradient(to right, transparent 50%, var(--vp-c-divider) 50%);
+  background-size: 8px 1px;
+  background-repeat: repeat-x;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .post-link:hover {
-  transform: scale(1.02);
-  transform-origin: left center;
+  background: var(--vp-c-bg-soft);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  transform: translateX(4px);
+}
+
+.post-link:hover::before {
+  opacity: 0;
 }
 
 .post-link:hover .post-title {
   color: var(--vp-c-brand-1);
+  font-weight: 600;
+}
+
+.post-link:hover .post-icon {
+  transform: scale(1.15) rotate(5deg);
+}
+
+.post-link:hover .post-date {
+  color: var(--vp-c-brand-1);
+  font-weight: 600;
 }
 
 .post-date {
@@ -247,6 +280,7 @@ const getIconUrl = (iconName: string): string | undefined => {
   font-family: var(--vp-font-family-mono);
   color: var(--vp-c-text-3);
   min-width: 3.5rem;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .post-icon {
@@ -256,6 +290,7 @@ const getIconUrl = (iconName: string): string | undefined => {
   justify-content: center;
   width: 20px;
   height: 20px;
+  transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 .icon-wrapper {
@@ -294,7 +329,7 @@ const getIconUrl = (iconName: string): string | undefined => {
   font-size: 1rem;
   font-weight: 500;
   color: var(--vp-c-text-1);
-  transition: color 0.2s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;

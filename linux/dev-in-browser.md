@@ -29,6 +29,8 @@ variables:
 
 如果你有公网 IP，阅读 <PostLink href="./gost" /> 来配置 HTTPS 代理，这样你在外网就可以通过 [ZeroOmega](https://github.com/zero-peak/ZeroOmega) 插件配置代理来访问你的内网开发环境。
 
+如果你没有公网 IP，但是有一台有公网 IP 的服务器，阅读 <PostLink href="./frp" /> 来配置内网穿透。
+
 ## DNS 配置
 
 假设你有一个域名 `$[domain]`，我建议你为每个服务都配置一个子域名。
