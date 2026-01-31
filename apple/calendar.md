@@ -1,5 +1,6 @@
 ---
 title: '定制日历订阅'
+icon: 'calendar.webp'
 ---
 
 从安卓转到 iOS 之后发现，iOS 自带的日历应用用着非常不顺手。
