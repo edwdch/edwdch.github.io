@@ -36,9 +36,9 @@ export default defineConfig({
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
     nav: [
-      { text: "主页", link: "/" },
-      { text: "Linux", link: "/linux/" },
-      { text: "Apple", link: "/apple/" },
+      { text: '<span class="inline-flex items-center gap-1"><span class="i-ph-house-fill"></span>主页</span>', link: "/" },
+      { text: '<span class="inline-flex items-center gap-1"><span class="i-simple-icons-ubuntu"></span>Linux</span>', link: "/linux/" },
+      { text: '<span class="inline-flex items-center gap-1"><span class="i-simple-icons-apple"></span>Apple</span>', link: "/apple/" },
     ],
     logo: "/favicon.webp",
     socialLinks: [{ icon: "github", link: "https://github.com/edwdch/edwdch.github.io" }],

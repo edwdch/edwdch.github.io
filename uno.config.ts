@@ -2,8 +2,8 @@ import {
   defineConfig,
   presetAttributify,
   presetIcons,
+  presetWind3,
   presetTypography,
-  presetUno,
   transformerDirectives,
   transformerVariantGroup,
 } from 'unocss'
@@ -18,7 +18,7 @@ export default defineConfig({
     },
   },
   presets: [
-    presetUno(),
+    presetWind3(),
     presetAttributify(),
     presetIcons({
       scale: 1.2,
@@ -30,5 +30,12 @@ export default defineConfig({
     transformerDirectives(),
     transformerVariantGroup(),
   ],
-  safelist: [],
+  safelist: [
+    'i-ph-house-fill',
+    'i-simple-icons-ubuntu',
+    'i-simple-icons-apple',
+    'inline-flex',
+    'items-center',
+    'gap-1',
+  ],
 })
