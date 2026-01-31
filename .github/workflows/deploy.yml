@@ -45,6 +45,16 @@ jobs:
         run: pnpm install # 或 pnpm install / yarn install / bun install
       - name: Build with VitePress
         run: pnpm docs:build # 或 pnpm docs:build / yarn docs:build / bun run docs:build
+      - name: Deploy to VPS
+        uses: easingthemes/ssh-deploy@main
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          ARGS: "-rlgoDzvc -i --delete"
+          REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
+          REMOTE_USER: ${{ secrets.REMOTE_USER }}
+          SOURCE: ".vitepress/dist/" # VitePress 默认生成的目录
+          TARGET: "/data/website/blog/" # 你的目标路径
+          EXCLUDE: "/.git/, /.github/"
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
