@@ -40,7 +40,7 @@ services:
     container_name: tinyauth
     environment:
       - APP_URL=https://auth.$[domain]
-      - USERS=user=edward:$$2a$$10$$bRboZICTvAeWy.Uc3G3.weLgzjrdk15zbGbVniNZ8Kujukfv2el3C
+      - USERS=edward:$$2a$$10$$bRboZICTvAeWy.Uc3G3.weLgzjrdk15zbGbVniNZ8Kujukfv2el3C
     ports:
       - "13000:3000"
 ```
