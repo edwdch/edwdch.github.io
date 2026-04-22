@@ -1,4 +1,9 @@
-# <DocTitle icon="local:authelia" title="Authelia" />
+---
+title: Authelia
+deprecated: true
+replacedBy: /linux/tinyauth
+---
+
 
 家庭内网中的服务如果需要向外网开放，通常会面临安全性的问题，所以鉴权是一个重要的环节。
 

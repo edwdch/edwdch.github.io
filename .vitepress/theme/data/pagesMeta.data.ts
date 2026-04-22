@@ -8,6 +8,8 @@ export interface PageMeta {
   icon?: string
   description?: string
   lastUpdated?: number
+  deprecated?: boolean
+  replacedBy?: string
 }
 
 // Get file's last modified time from git
@@ -53,6 +55,8 @@ export default createContentLoader('**/*.md', {
         icon: page.frontmatter?.icon,
         description: page.frontmatter?.description,
         lastUpdated,
+        deprecated: page.frontmatter?.deprecated === true ? true : undefined,
+        replacedBy: page.frontmatter?.replacedBy,
       }
     })
   },

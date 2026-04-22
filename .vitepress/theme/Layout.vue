@@ -42,7 +42,11 @@ watch(() => page.value.relativePath, toggleNavTitle);
 </script>
 
 <template>
-  <Layout />
+  <Layout>
+    <template #doc-before>
+      <DeprecatedNotice />
+    </template>
+  </Layout>
 </template>
 
 <style>

@@ -1,8 +1,8 @@
-# Squid
-
-::: tip
-建议使用 [Gost](./gost.md) 来替代 Squid，配置更简单。
-:::
+---
+title: Squid
+deprecated: true
+replacedBy: /linux/gost
+---
 
 Squid 是一个代理服务器，我们可以通过它实现访问控制等功能。当我们需要暴露局域网内的服务给外网访问时，可以使用 Squid 来实现。
 

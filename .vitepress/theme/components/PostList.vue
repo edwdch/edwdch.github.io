@@ -2,6 +2,7 @@
 import { computed } from 'vue'
 import { useRoute, withBase } from 'vitepress'
 import { data as pagesMeta } from '../data/pagesMeta.data'
+import { TriangleAlert } from 'lucide-vue-next'
 
 // Load SVG files as raw content for inline rendering
 const svgFiles = import.meta.glob('../assets/icons/*.svg', {
@@ -167,7 +168,11 @@ const getIconUrl = (iconName: string): string | undefined => {
               </span>
             </span>
             <!-- Title -->
-            <span class="post-title">{{ post.displayTitle }}</span>
+            <span class="post-title" :class="{ 'post-title--deprecated': post.deprecated }">{{ post.displayTitle }}</span>
+            <!-- Deprecated icon -->
+            <span v-if="post.deprecated" class="post-deprecated-icon" title="已废弃" aria-label="已废弃">
+              <TriangleAlert :size="16" :stroke-width="2" />
+            </span>
           </a>
         </li>
       </ul>
@@ -335,9 +340,22 @@ const getIconUrl = (iconName: string): string | undefined => {
   white-space: nowrap;
 }
 
+.post-title--deprecated {
+  text-decoration: line-through;
+  color: var(--vp-c-text-3);
+}
+
 .no-posts {
   color: var(--vp-c-text-3);
   text-align: center;
   padding: 2rem;
+}
+
+.post-deprecated-icon {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  color: var(--vp-c-warning-1);
+  opacity: 0.85;
 }
 </style>
