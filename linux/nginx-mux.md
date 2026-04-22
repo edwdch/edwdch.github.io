@@ -7,6 +7,8 @@ variables:
     label: "主域名"
 refs:
   - nginx
+deprecated: true
+replacedBy: /linux/haproxy
 ---
 
 最近新租用了一台 VPS，部署了多个服务，如 VS Code Server、Tinyauth 以及 Gost 等等，对于 VS Code Server 和 Tinyauth，都可以通过反向代理来使用同一个 443 端口，但是 Gost 作为一个正向代理服务，没办法通过反向代理来实现端口复用。
