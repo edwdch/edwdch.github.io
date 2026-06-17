@@ -26,7 +26,29 @@ sudo apt install haproxy
 
 ## 配置
 
-HAProxy 的配置文件默认位于 `/etc/haproxy/haproxy.cfg`，并且包含一个 `global` 部分和一个 `defaults` 部分。在我们的配置中，不会改动这两部分。
+HAProxy 的配置文件默认位于 `/etc/haproxy/haproxy.cfg`，不便管理，我们应修改指向我们自己管理的配置文件：
+
+先复制一份默认配置文件到我们管理的目录：
+
+```bash
+mkdir -p /data/app/haproxy
+cp /etc/haproxy/haproxy.cfg /data/app/haproxy/
+```
+
+修改 haproxy 的默认配置文件 `/etc/default/haproxy`，使其包含我们管理的配置文件：
+
+```conf{7}
+# Defaults file for HAProxy
+#
+# This is sourced by both, the initscript and the systemd unit file, so do not
+# treat it as a shell script fragment.
+
+# Change the config file location if needed
+CONFIG="/data/app/haproxy/haproxy.cfg"
+
+# Add extra flags here, see haproxy(1) for a few options
+#EXTRAOPTS="-de -m 16"
+```
 
 HAProxy 的证书格式有特殊要求，如果你跟我一样使用 acme.sh 生成证书，你可以使用以下命令来生成 HAProxy 需要的证书格式：
 
@@ -121,6 +143,6 @@ backend proxy_backend
 ## 验证和重载
 
 ```bash
-haproxy -c -f /etc/haproxy/haproxy.cfg
+haproxy -c -f /data/app/haproxy/haproxy.cfg
 systemctl reload haproxy
 ```

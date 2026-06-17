@@ -51,3 +51,24 @@ sudo ufw enable
 ```bash
 sudo ufw status verbose
 ```
+
+## 删除规则
+
+1. 首先查看带编号的规则列表：
+
+```bash
+sudo ufw status numbered
+```
+
+2. 删除指定编号的规则：
+
+```bash
+sudo ufw delete [编号]
+```
+
+3. 重载 UFW 以应用更改：
+
+```bash
+sudo ufw reload
+sudo ufw status verbose
+```

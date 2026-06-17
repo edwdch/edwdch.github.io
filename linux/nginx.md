@@ -36,7 +36,7 @@ mkdir -p /data/nginx/snippets
 
 ::: code-group
 
-```nginx{7-8,59-60,62-68} [/etc/nginx/nginx.conf]
+```nginx{7-9,60-61} [/etc/nginx/nginx.conf]
 user www-data;
 worker_processes auto;
 pid /run/nginx.pid;
@@ -45,6 +45,7 @@ include /etc/nginx/modules-enabled/*.conf;
 events {
 	worker_connections 4096;
 	multi_accept on;
+	use epoll;
 }
 
 http {
@@ -97,14 +98,6 @@ http {
 
 	include /data/nginx/conf.d/*.conf;
 	# include /etc/nginx/sites-enabled/*;
-
-	server {
-		listen 80 default_server;
-		listen [::]:80 default_server;
-		server_name _;
-			
-		return 302 https://$host$request_uri;
-	}
 }
 ```
 
